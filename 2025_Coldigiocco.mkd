@@ -5,6 +5,14 @@ date: <date>
 longdate: <longdate>
 ---
 
+##  
+
+the code and source of this presentation are available at 
+
+\texttt{ \url{ $url$ } }
+
+Commit: \texttt{ $commit$ }
+
 # Motivation
 
 ## Bundles in the rocks
@@ -14,8 +22,10 @@ longdate: <longdate>
 ![](feart-12-1357751-g005.jpg)
 \fullcite{arts24aa}
 \column{6cm}
+
 - The whole idea of cyclostratigraphy is to identify bundle structures, which are organised according to a hiearchy of periods. 
 - Where does this come from ? 
+
 \ecolumns
 
 # The two-body problem

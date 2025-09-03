@@ -7,6 +7,9 @@ PDF_DIR = Pdf_output
 XP_DIR = Xp_files
 EEPIC_DIR = Eepic
 
+REPO_URL := $(shell git config --get remote.origin.url)
+COMMIT_HASH := $(shell git rev-parse --short HEAD)
+
 # Automatically find Quarto files and define output paths
 QMD = $(wildcard $(QUARTO_DIR)/*.qmd)
 HTML = $(patsubst $(QUARTO_DIR)/%.qmd, $(HTML_DIR)/%.html, $(QMD))
@@ -43,7 +46,12 @@ $(EEPIC_DIR)/%.eepic: $(XP_DIR)/%.xp | $(EEPIC_DIR)
 
 # Rule to generate LaTeX from Markdown
 $(JOBNAME).tex: $(JOBNAME).mkd header.tex
-	pandoc -s --template=/Users/crucifix/templates/presentation.tex -H header.tex -t beamer 2025_Coldigiocco.mkd -o 2025_Coldigiocco.tex
+	pandoc -s --template=templates/presentation.tex \
+	         -H header.tex \
+					 -t beamer \
+		       -V url=$(REPO_URL) \
+	         -V commit=$(COMMIT_HASH) \
+					 2025_Coldigiocco.mkd -o 2025_Coldigiocco.tex
 
 handouts: $(JOBNAME).tex $(PNG) $(EEPIC) | $(PDF_DIR)
 	pdflatex -jobname $(PDF_DIR)/2025_Coldigiocco_presentation "\PassOptionsToClass{handout}{beamer}\input{${JOBNAME).tex}"
