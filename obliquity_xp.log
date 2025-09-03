@@ -1,0 +1,5 @@
+epix: Processing obliquity.xp:
+epix: /usr/bin/g++ epix-29703/obliquity.exe-tmp.cc -w -o epix-29703/obliquity.exe -I/usr/local/include -L/usr/local/lib/epix -lm -lepix
+epix: Writing eepic file: ./epix-29703/obliquity.exe > obliquity.eepic
+
+Transcript written on obliquity_xp.log

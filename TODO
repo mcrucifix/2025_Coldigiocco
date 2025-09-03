@@ -1,0 +1,13 @@
+- show two solutions with different k terms
+- make a showcase for the eccentricity g3-g4 breaking
+- add a figure with the analytical solution of BREtagnon
+
+
+- make bibliography
+- make Makefile with .qmd
+
+- visualise two different precession rates. We could use the fresh Julia code ? 
+
+- redo the eccentricity wavelet plot and comment it. It would be nice to superimpose it to the time series. 
+
+- precession also causes chaos

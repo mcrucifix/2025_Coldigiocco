@@ -1,0 +1,130 @@
+---
+title: "Sine Waves and Beating"
+format: html
+execute: 
+  echo: true
+  warning: false
+  message: false
+---
+
+
+# Introduction
+
+In this document, we will explore how simple sine waves can interact to produce **beating patterns** and how these can be visualised using a **continuous wavelet transform**.  This exercise is designed to show the phenomenon of **amplitude modulation** clearly.
+
+Before starting, make sure you have installed the package `gtseries`, which contains useful functions for spectral analysis, including the wavelet transform. You can install it with:
+
+```r
+# install.packages("devtools")
+# devtools::git_install("https://forge.uclouvain.be/mcrucifix/tseries.git")
+```
+
+Then, load it:
+
+```{r}
+library(gtseries)
+```
+
+
+# Defining Frequencies
+
+We first define a time axis and a few close frequencies. These will allow us to observe beating patterns.
+
+```{r}
+t <- seq(32768)
+
+# Define frequencies
+w1 <- 1/100
+w2 <- 1/104
+w3 <- 1/130
+w4 <- 1/134
+```
+
+
+# Visualising Frequencies
+
+Let us plot vertical bars to represent the different frequencies.
+
+```{r}
+plot(c(w1, w2, w3, w4), rep(1, 4), type = "h", lwd = 3,
+     xlab = "Frequency", ylab = "Amplitude", main = "Frequencies")
+```
+
+👉 **Think:** Why do we expect interference (beating) when frequencies are close to each other?
+
+
+# Constructing Sine Waves
+
+We now build individual sine waves.
+
+```{r}
+s1 <- ts(sin(t*w1), start = 0, deltat = 1)
+s2 <- ts(sin(t*w2), start = 0, deltat = 1)
+s3 <- ts(sin(t*w3), start = 0, deltat = 1)
+s4 <- ts(sin(t*w4), start = 0, deltat = 1)
+```
+
+
+# Beating Between $w_1$ and $w_2$
+
+Let us first combine two close frequencies, $w_1$ and $w_2$.
+
+```{r}
+plot(s1 + s2,   type = 'l', main = "Beating between w1 and w2")
+lines(2*cos(0.5*(w1-w2)*t), col = 'blue', lwd = 3)
+lines(-2*cos(0.5*(w1-w2)*t), col = 'blue', lwd = 3)
+```
+
+👉 **Observe:** The envelope (in blue) shows the amplitude modulation resulting from interference.
+
+We can also look at the wavelet transform:
+
+```{r}
+plot(cwt_morlet(s1 + s2))
+```
+
+
+# Beating Between $w_1$ and $w_3$
+
+Now we try with frequencies that are farther apart.
+
+```{r}
+plot(s1 + s3, type = 'l', main = "Beating between w1 and w3")
+lines(2*cos(0.5*(w1-w3)*t), col = 'blue', lwd = 3)
+lines(-2*cos(0.5*(w1-w3)*t), col = 'blue', lwd = 3)
+```
+
+👉 **Question:** How does the modulation period compare with the case of $w_1$ and $w_2$?
+
+```{r}
+plot(cwt_morlet(s1 + s3))
+```
+
+
+# Combining Three Frequencies
+
+Now let us add three frequencies together. This will create a more complex beating structure.
+
+```{r}
+sum3 <- s1 + s2 + s3
+
+plot(sum3, type = 'l', ylim = c(-6,6), main = "Combination of three frequencies")
+lines(2*cos(0.5*(w1-w3)*t), col = 'blue', lwd = 3)
+lines(2*cos(0.5*(w2-w3)*t), col = 'blue', lwd = 3)
+lines(2*cos(0.5*(w2-w3)*t) + 2*cos(0.5*(w2-w3)*t), col = 'green', lwd = 3)
+lines(-2*cos(0.5*(w2-w3)*t) - 2*cos(0.5*(w2-w3)*t), col = 'green', lwd = 3)
+lines(3*cos(0.5*(w1-w2)*t), col = 'red', lwd = 3)
+lines(-3*cos(0.5*(w1-w2)*t), col = 'red', lwd = 3)
+```
+
+```{r}
+plot(cwt_morlet(sum3))
+```
+
+👉 **Experiment:** Try adding the fourth frequency `w4`. How does the pattern become more complex?
+
+
+# Conclusion
+
+In this exercise, we have seen how **beating patterns** emerge from the superposition of close sine waves, and how the **wavelet transform** provides a time-frequency perspective of the modulation. This is a key concept for understanding **amplitude modulation** in cyclostratigraphy. 
+

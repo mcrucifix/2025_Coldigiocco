@@ -1,0 +1,19 @@
+\frametitle{The angles and variables describing the orbit (Keplerian elements)}
+\protect\hypertarget{the-angles-and-variables-describing-the-orbit-keplerian-elements}{}
+\includegraphics{osculating}
+
+\begin{verbatim}
+  \dot{i} &= 0 \\
+\end{align*}
+\end{verbatim}
+
+\% Right column \column{0.48\textwidth} \begin{align*}
+      \dot{\varpi} &= 0
+      \dot{\Lambda} &= 0.
+      \dot(M) = t/P
+    \end{align*} \textbackslash end\{columns\}
+
+with \(\tan \frac{\nu}{2} = \sqrt{\frac{1+e}{1-e}} \tan \frac{E}{2}\)
+and \(\ell = E - e \sin E\).
+
+seems easy.

@@ -1,0 +1,191 @@
+---
+title: "Resonance between obliquity and eccentricity"
+format: html
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+```{r}
+# Load the package
+require(palinsol)
+require(gtseries)
+```
+
+## Objective of the exercise
+
+In this exercise, we will explore the famous **(g3–g4) – 2(s3–s4) resonance**, which couples obliquity and eccentricity.  
+
+- Obliquity shows a modulation at **1.2 million years (Myr)**.  
+- Eccentricity shows a signal at **2.4 Myr**.  
+- These two signals are linked by resonance, and this resonance has been active for at least the last **50 Myr**, although it occasionally broke down.  
+
+We will use the `palinsol` package, which provides orbital solutions (BER78, La04, La2010, etc.). Note that `palinsol` is in need of an update (it does not yet include Zeebe’s new solutions, nor does it extend older than 65 Ma), but it is sufficient for this exercise.
+
+---
+
+## Step 1: Define the time interval
+
+```{r}
+starttime <- -20e6  # 20 Ma
+deltat    <- 4e3    # 2 ka
+
+starttime_kyr <- starttime / 1e3 
+deltat_kyr    <- deltat / 1e3
+
+times <- seq(from = starttime, to = 0, by = deltat)
+```
+
+---
+
+## Step 2: Compute orbital elements
+
+```{r}
+O <- sapply(times, la04)
+
+Obl <- ts(O['eps', ], start= starttime_kyr, deltat = deltat_kyr) * 180 / pi
+Ecc <- ts(O['ecc', ], start= starttime_kyr, deltat = deltat_kyr)
+```
+
+---
+
+## Step 3: Plot obliquity and eccentricity
+
+```{r}
+par(mar=c(5,4,4,4))
+plot(Obl, ylim=c(22,25), col="blue", ylab="Obliquity (degrees)")
+par(new=TRUE)
+plot(Ecc, ylim=c(0,0.06), col="red", axes=FALSE, xlab="", ylab="")
+axis(side=4)
+mtext("Eccentricity", side=4, line=3)
+legend("topright",
+       legend = c("Obliquity", "Eccentricity"),
+       col = c("blue", "red"),
+       lty = 1, bty = "n")   # bty="n" removes the box around the legend
+```
+
+---
+
+## Step 4: Wavelet analysis of obliquity
+
+```{r}
+M <- cwt_morlet(Obl)
+plot(M, xlab= "Time [kyr]", ylab = "Period [kyr]")
+```
+
+We have seen that obliquity emerges from $s-k$ terms, so the _beatings_ of obliquity are mainly differences of $s$ terms. 
+
+For reference, the La88 "s-terms" are as follows. They have been slightly updated since but not critically for this exercise
+
+## s terms in Laskar et al., 1988
+
+| Term | Value    |
+|------|---------:|
+| *I*₁ | -5.6043  |
+| *I*₂ | -7.0530  |
+| *I*₃ | -18.8499 |
+| *I*₄ | -17.7614 |
+| *I*₅ | 0.0000   |
+| *I*₆ | -26.3300 |
+| *I*₇ | -2.9854  |
+| *I*₈ | -0.6917  |
+
+Be carefull, as usual Laskar provides these numbers in units of arc seconds per year. 
+
+These "s-" terms had already been well-captured by Lagrange, and note that one of them is zero, reflecting the fact that there is one invariant mode (this is the invariant plane that is perpendicular to the total angular momentum of all planets)
+
+::: callout-tip
+
+Can you identify the origin of the 173-ka and 1.2-Ma beatings? They are combinations of $s-$terms. The smaller the difference between two $s$ terms, the longest beating you get. 
+
+:::
+
+---
+
+## Step 5: Extract the 1.2-My component
+
+Here, we will use a strategy based on the continuous wavelet transform with the Morlet wavelet to, first, extract the enveloppe of the signal, then filter that enveloppe in the frequency range that interests us. You could do this with other tools, I show you here how to do it with the wavelet. 
+
+
+::: callout-tip
+
+### Continuous wavelet as your Swiss-army knife tool 
+
+When you ask for the recontrution of a signal based on its Morlet Continuous Wavelet trasform, you obtain a __complex signal__. It is "complex" in the mathematical sense: it just means that, attached to its 'real' part (which is the signal in itself), there is, attached, an 'imaginary' part. The real part is the original signal, recovered after the reconstruction. The 'imaginary' part is the same signal, but with a 1/4 phase lag. The latter is the equivalent of the Hilbert transform. By looking at the "Modulus" of this complex number, we obtain the __enveloppe of the orignal signal.__ In `R`, you get this using the operator `Mod`. Below, we use this strategy to obtain the enveloppe. Then we filter this enveloppe. You can also filter with the wavelet transform. This is done by using only a part of the wavelet transform to reconstruct it. Here, we cut the signal in the 800ka - 2000ka range. Below, we show a plot with the envoloppe and, in red, the filtered. 
+
+
+```{r}
+### Produces the complex signal with the real and imaginary parts which are 1/4 out of phase, by design
+Complex_Obliquity <- reconstruct_morlet(M)
+### Produce the enveloppe using the Modulus
+Modulus_of_Obliquity <- Mod(Complex_Obliquity)
+### Filter : you take a Wavelet transform, and reconstruct it with only a range of frequencies
+O12_signal <- Re(reconstruct_morlet(cwt_morlet(Modulus_of_Obliquity),
+                                 periods = c(800,2000)))
+plot(Modulus_of_Obliquity)
+lines(O12_signal + mean(Modulus_of_Obliquity), col='red', lwd=4)
+```
+
+:::
+
+---
+
+## Step 6: Wavelet analysis of eccentricity
+
+Now, let's inspect the wavelet spectrum of eccentricity. 
+
+```{r eccentricity_wavelet }
+M_Ecc <- cwt_morlet(Ecc)
+plot(M_Ecc, xlab= "Time [kyr]", ylab = "Period [kyr]")
+```
+
+::: callout-tip
+### The eccentricity spectrum
+
+- This plot diserves a little discussion because it complements the discussion of the previous exercise. 
+- Do you recognise the hierarchy of 100-ka, 400-ka and 2.4 Ma cycles ? 
+- Remember what causes the 100-ka signals: these are different couples of $g$ terms
+- The interference between different 100-ka components mobilise the same $g$ terms as those which cause the 400-ka cycle. 
+- And, similarly, there are 2 nearby 400-ka cycles : the main 404-ka cycle caused by the $g2-g5$, and a little one, around 484-ka, caused by the higher-order combination $g2-g3 + g4-g5$.
+- The interference between different 400-ka components mobilise the same $g$ terms as those which cause the 2.4 Ma cycle: the $g3$, $g4$ pair. 
+
+
+Hence (but this should be a bit of a reminder now, isnt'it ? ), __there are different, but coherente expressions of the 2.4 Ma signal__. 
+
+:::
+---
+
+## Step 7: Isolate the direct 2.4 Ma component
+
+We will extract the 2.4 Ma component. As we have just seen there are different ways to do this, since the signal is expressed in various ways.  Our approach here is to take the direct expression of the 2.4 Ma. The method consists in isolating the part of the Wavelet spectrum that is around periods of 2 Ma to 2.7 Ma, (a wide range covering the 2.4 Ma signal), and take the real part of the signal. 
+
+```{r}
+Eccentricity_24 <- Re(reconstruct_morlet(M_Ecc, periods = c(2.0e3, 2.7e3)))
+```
+
+---
+
+## Step 8: Compare obliquity modulation with eccentricity 2.4 Ma
+
+```{r}
+par(mar=c(5,4,4,4))
+plot(O12_signal, col="blue", ylab="1.2 Ma obliquity modulation")
+par(new=TRUE)
+plot(Eccentricity_24, col="red", axes=FALSE, xlab="", ylab="")
+axis(side=4)
+mtext("2.4 Ma eccentricity component", side=4, line=3)
+```
+
+::: callout-tip
+### Examining the resonance
+
+- What do you observe when comparing the **1.2 Ma obliquity modulation** with the **2.4 Ma eccentricity component**?  
+- Can you recognise the phase relationship between them?  
+- How does this relationship illustrate the **(g3–g4) – 2(s3–s4) resonance** mechanism ? 
+- What are the implication for cyclostratrigraphy  ? 
+
+:::
+
+
+__Remember__ : this resonance was active during the last 50 Ma, but it can break, or different resonances are possible. So do not take it fror granted for Paleozoic or Mesozoic settings ! 

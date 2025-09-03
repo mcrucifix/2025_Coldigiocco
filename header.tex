@@ -1,0 +1,31 @@
+\usepackage{pgfplots}
+\usepackage{wasysym}
+\usepackage{tcolorbox}
+
+% define the style (light green, rounded corners, no border)
+\newtcbox{\badge}{
+    boxrule=0pt,
+    colback=green!20,
+    colframe=green!20,
+    arc=4pt,
+    boxsep=1pt,
+    left=4pt,
+    right=4pt,
+    top=2pt,
+    bottom=2pt,
+    sharp corners=all,
+  }
+
+
+% A macro to switch to red
+\newcommand{\redframetitle}{%
+  \setbeamercolor{frametitle}{bg=red!20, fg=white}%
+}
+
+% A macro to switch back to blue
+\newcommand{\blueframetitle}{%
+  \setbeamercolor{frametitle}{bg=uclblue, fg=white}%
+}
+
+
+\bibliography{references.bib}

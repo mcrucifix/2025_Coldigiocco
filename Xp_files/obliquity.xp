@@ -1,0 +1,478 @@
+/* -*-ePiX-*- */
+#include "epix.h"
+using namespace ePiX;
+
+// compile with, e.g., elaps -pdf obliquity.xp
+
+const double Latitude (0.15);
+const double MAX(1.2);
+const  double e = 0.2;
+const  double I = 08.5 / 360. ;
+const  double Omega = 0.07;
+const  double lambda0 = 0.12;
+const  double Obliquity = 23.5 / 360.0;
+//const  double Psi = 0.22;
+
+// obliquity of date
+
+double Psi(){return(0.22);};
+
+void dotS(P coord){label(coord,"$\\earth$");}
+
+P operator* (const P& vector, const double& c){
+      return P(vector.x1()*c, vector.x2()*c, vector.x3()*c);
+}
+
+
+P ecliptic(double longitude, P &p_on_plane){
+
+    double x, y, x1, y1, z;
+
+    double rho = 1. ;
+    double nu = longitude - lambda0;
+    double x_on_plane = rho * Cos(longitude);
+    double y_on_plane = rho * Sin(longitude);
+
+    x1 = x_on_plane * 1 ; 
+    y1 = y_on_plane * Cos (I) ;
+    z  = y_on_plane * Sin (I) ;
+
+    x = x1 * Cos (Omega) - y1 * Sin (Omega);
+    y =  +  x1 * Sin (Omega) + y1 * Cos (Omega);
+
+    P rp;
+    rp = P(x,y,z);
+    y1 = y_on_plane  ;
+
+    x = x1 * Cos (Omega) - y1 * Sin (Omega);
+    y = + x1 * Sin (Omega) + y1 * Cos (Omega);
+    p_on_plane = P(x,y,0);
+
+    return(rp);
+}
+
+P ecliptic(double longitude, int on_epoch = 0){
+
+  double x, y, x1, y1, z;
+
+  double rho = 1. ;
+  double nu = longitude -  lambda0;
+  double x_on_plane = rho * Cos(longitude);
+  double y_on_plane = rho * Sin(longitude);
+
+
+    x1 = x_on_plane * 1 ; 
+    y1 = y_on_plane * Cos (I) ;
+    z  = y_on_plane * Sin (I) ;
+
+    x = x1 * Cos (Omega) - y1 * Sin (Omega);
+    y =  +  x1 * Sin (Omega) + y1 * Cos (Omega);
+
+    P rp;
+    rp = P(x,y,z);
+    if (on_epoch == 1){
+    y1 = y_on_plane  ;
+
+    x = x1 * Cos (Omega) - y1 * Sin (Omega);
+    y = + x1 * Sin (Omega) + y1 * Cos (Omega);
+    rp = P(x,y,0);
+    }
+ 
+    return(rp);
+}
+
+P ecliptic_epoch(double longitude){
+
+
+  double rho = 1. ;
+  double nu = longitude ;
+  double x = rho * Cos(longitude);
+  double y = rho * Sin(longitude);
+
+  P rp = P(x,y,0);
+  return(rp);
+}
+
+ P rotate_around_ecliptic_of_epoch (double longitude, double omega, double ii){
+   // rotate point on the ecliptic of epoch at longitude longitude, around the point Omega at longitude omega, by angle i
+    double deltalongitude = longitude - omega ; 
+    double x_on_plane = Cos(deltalongitude);
+    double y_on_plane = Sin(deltalongitude);
+    
+    double x1 = x_on_plane;
+    double y1 = y_on_plane * Cos (ii) ;
+    double z  = y_on_plane * Sin (ii) ;
+     
+    double x = x1 * Cos (omega) - y1 * Sin (omega);
+    double y =  +  x1 * Sin (omega) + y1 * Cos (omega);
+    return(P(x,y,z));
+ }
+
+
+ double isometric_latitude (double latitude){
+   return(log(Tan(0.125 + latitude / 2.0))); } 
+
+ P arc_around_vernal_of_date(double Longitude_Vernal_of_Date, double radius, double angle){
+    
+    double x, y, z ; 
+    double latitude_vernal_of_date = Asin(Sin(I)*Sin (Longitude_Vernal_of_Date)  ) ; 
+
+    double longitude, latitude; 
+    double delta_longitude;
+ 
+
+    latitude = 0.25 - Acos(
+        Sin(latitude_vernal_of_date) * Cos(radius) +
+        Cos(latitude_vernal_of_date) * Sin(radius) * Cos(0.25 + angle));
+
+
+
+    delta_longitude = Asin ( Sin(radius) * Sin( 0.25 + angle) / 
+        Sin ( 0.25 - latitude ) ); 
+
+    // do not forget to transform into revolutions() ; 
+    // attention: Longitude_Vernal_of_Date supplied with respect
+    // to ecliptic_of_date (!) 
+    longitude = (Longitude_Vernal_of_Date + Omega) + delta_longitude;  
+    x =     Cos(longitude) * Cos(latitude); 
+    y =     Sin(longitude) * Cos(latitude); 
+    z = Sin(latitude); 
+
+    return (P(x,y,z)); 
+
+}
+
+
+
+
+
+
+ P equator(double longitude, int on_epoch = 0){
+
+    double x, y, x1, y1, z;
+
+    double rho = 1. ;
+    double nu = longitude -  lambda0;
+    double x_on_plane = rho * Cos(longitude);
+    double y_on_plane = rho * Sin(longitude);
+
+
+    x1 = x_on_plane * 1 ; 
+    y1 = y_on_plane * Cos (-Obliquity) ;
+    z  = y_on_plane * Sin (-Obliquity) ;
+
+    x = x1 * Cos (-Psi()) - y1 * Sin (-Psi());
+    y =  +  x1 * Sin (-Psi()) + y1 * Cos (-Psi());
+
+    P rp;
+    rp = P(x,y,z);
+
+    if (on_epoch == 1){
+    y1 = y_on_plane  ;
+
+    x = x1 * Cos (-Psi()) - y1 * Sin (-Psi());
+    y = + x1 * Sin (-Psi()) + y1 * Cos (-Psi());
+    rp = P(x,y,0);
+    }
+ 
+
+    return(rp);
+}
+
+
+
+
+int main(int argc, char* argv[]) {
+   if (argc == 3)
+     {
+       char* arg;
+       double temp1, temp2;
+       temp1=strtod(argv[1], &arg);
+       temp2=strtod(argv[2], &arg);
+
+       tix()=temp1/temp2;
+     }
+
+
+
+revolutions(); // set angle units
+                 //
+double Obliquity_date = Acos (
+   + Cos(I)*Cos(Obliquity) - Sin(I)*Sin(Obliquity) * Cos(Psi() + Omega));
+
+
+// psi of date
+// rules of sines
+double Longitude_Vernal_of_Date = 
+     - Asin (Sin(Psi() + Omega) * 
+        Sin(Obliquity) / Sin( Obliquity_date ));
+
+double RA_Vernal_of_Date = 
+     Asin (Sin(Psi() + Omega) * 
+        Sin(I) / Sin( Obliquity_date));
+
+
+  double colatitude = 0.25 - Latitude;
+  picture(P(-MAX,-MAX),P(MAX,MAX), "12x12cm");
+  begin();
+  camera.at(P(3, -1, 1));
+ 
+//  camera.roll(-(0.25-Latitude));
+  
+  pen(Black()); // coordinate grid
+ solid();
+
+  P O=sph(0,0,0);
+  pen(Red(1.0));
+  Sphere S;
+  pen(Black(1.0));
+ 
+  double rho, x, y, z, x_on_plane, y_on_plane;
+  double x1, y1, x2, y2, nu;
+
+  P p_date, p_epoch, e_date;
+  path Ecliptic;
+  path Ecliptic_epoch;
+  path Equator ; 
+
+  path arrow_Psi;
+  path arrow_Psi_star;
+  path arrow_Pi; 
+  path arrow_Omega; 
+
+  path project_gamma;
+  path project_gamma0;
+  path project_epsilon;
+  path project_epsilon0;
+  path project_P;
+
+  for (double longitude = 0.0; longitude < 1 ;  longitude = longitude + 0.01){
+  
+    p_date = ecliptic (longitude, p_epoch);
+//    p_epoch = ecliptic_epoch (longitude);
+    e_date = equator  (longitude, 0);
+
+    Ecliptic.pt(O+p_date);
+    Ecliptic_epoch.pt(O+p_epoch);
+    Equator.pt(O+e_date);
+
+  }
+
+  for (double longitude = 0; longitude < Omega ;  longitude = longitude + 0.01){
+    arrow_Omega.pt(ecliptic_epoch(longitude));
+
+  }
+
+  for (double longitude = -Omega; longitude < lambda0 ;  longitude = longitude + 0.01){
+  
+    arrow_Pi.pt(ecliptic(longitude));
+
+  }
+
+  for (double longitude = -Omega; longitude > Longitude_Vernal_of_Date; longitude = longitude - 0.01){
+  
+    arrow_Psi_star.pt(ecliptic(longitude));
+
+  }
+
+  for (double longitude = 0;
+      longitude > -Psi() ; longitude = longitude - 0.01){ 
+  
+    arrow_Psi.pt(ecliptic_epoch(longitude));
+
+  }
+
+
+
+  bbold();
+  pen(Black(1.0));
+  label_color(Black(1.0));
+  arrow_Omega.draw();
+  arrow(ecliptic_epoch(Omega - 0.03), ecliptic_epoch(Omega - 0.01));
+  label(ecliptic_epoch(0.3*Omega), P(0, 5), "$\\Omega$", t);
+ 
+  pen(Blue(1.0));
+  label_color(Blue(1.0));
+  arrow_Pi.draw();
+  arrow(ecliptic(lambda0 - 0.02), ecliptic(lambda0));
+//  arrow(ecliptic( - 0.02), ecliptic(0));
+  label(ecliptic(-Omega + 0.4 * (Omega + lambda0)), 
+        P(0, -5), "$\\Pi = \\Omega + \\Lambda$", br);
+
+
+
+  pen(Magenta(0.8));
+  label_color(Magenta(0.8));
+  dot(ecliptic(-Omega));
+  label(ecliptic(0.5*Longitude_Vernal_of_Date+0.02 - Omega),
+      P(0, 5), "$\\psi^\\mathrm{g}$", t);
+
+  label(ecliptic(Longitude_Vernal_of_Date)*1.25, P(0,0), "$\\aries$");
+  arrow (ecliptic(Longitude_Vernal_of_Date)*0.7, 
+         ecliptic(Longitude_Vernal_of_Date)*1.2);
+  arrow_Psi_star.draw();
+  arrow(ecliptic(Longitude_Vernal_of_Date+0.02), ecliptic(Longitude_Vernal_of_Date));
+
+
+  label(ecliptic(-Omega - 0.5 * lambda0), 
+        P(0, -5), "${\\boxed{{\\textcolor{black}\\varpi} = \\psi^g + {\\textcolor{blue}\\Pi}}}$", br);
+
+  pen(Blue(-0.5));
+  label_color(Blue(-0.5));
+  dot(ecliptic_epoch(0));
+  arrow_Psi.draw();
+  arrow(ecliptic_epoch(-Psi()+0.02), ecliptic_epoch(-Psi()));
+  label(ecliptic_epoch(-0.5*Psi()),
+      P(4, 5), "$\\psi$", t);
+
+
+  plain();
+
+
+
+
+
+
+  Ecliptic.close();
+  Ecliptic_epoch.close();
+  Equator.close();
+
+  path Ecliptic_back = Ecliptic;
+  path Equator_back = Equator;
+  path Ecliptic_epoch_back = Ecliptic_epoch;
+  solid();
+  Ecliptic.clip_to(S, cam().viewpt(), true);
+  Ecliptic_back.clip_to(S, cam().viewpt(), false);
+
+  Ecliptic_epoch.clip_to(S, cam().viewpt(), true);
+  Ecliptic_epoch_back.clip_to(S, cam().viewpt(), false);
+
+  Equator.clip_to(S, cam().viewpt(), true);
+  Equator_back.clip_to(S, cam().viewpt(), false);
+
+
+  solid();
+
+
+  for (int i=0; i<=10; i++){
+    double ii = I*i/10. ;
+    double ee0 = Obliquity*i/10. ;
+    double ee = Obliquity_date*i/10. ;
+    project_gamma0.pt(rotate_around_ecliptic_of_epoch(0., Omega, ii));
+    project_gamma.pt(
+        rotate_around_ecliptic_of_epoch(Longitude_Vernal_of_Date + Omega, Omega, ii));
+    project_P.pt(rotate_around_ecliptic_of_epoch(Omega + lambda0 , Omega, ii));
+    project_epsilon0.pt(rotate_around_ecliptic_of_epoch(-Psi()+0.02 , -Psi(), -ee0));
+    project_epsilon.pt(arc_around_vernal_of_date(Longitude_Vernal_of_Date, 0.04,  ee));
+
+  }
+
+  dashed();
+  project_gamma.draw();
+  project_gamma0.draw();
+  pen(Blue(1.0));
+  project_P.draw();
+  solid();
+
+  pen(Black(1.0)); 
+  label_color(Black(1.0)); 
+  Ecliptic_epoch.draw();
+
+// reference direction 
+  arrow(ecliptic_epoch(0)*0.4, ecliptic_epoch(0)*1.3);
+  label(ecliptic_epoch(0)*1.3, P(2,-2), "$\\aries_0$", br);
+
+// ascending node of orbit of date wrt orbit of epoch
+//
+//  arrow(O, ecliptic_epoch(Omega));
+//  label(ecliptic_epoch(Omega)*1.05, P(0,0), "$\\leo$");
+//  arrow(O, ecliptic_epoch(Psi()));
+  pen(Blue(1.2)); Ecliptic.draw();
+//  arrow(O, ecliptic(0 , 1 ));
+//  arrow(O, ecliptic(lambda0, 0));
+  label(O, P(0,0),  "$\\odot$", c );
+  pen(Blue(0.5)); Ecliptic.draw();
+  bold();
+//  arrow(O, ecliptic(Longitude_Vernal_of_Date, 0));
+  plain();
+  pen(Red(1.0)); Equator.draw(); 
+  project_epsilon0.draw();
+  project_epsilon.draw();
+
+//  arrow(O, equator(0, 0));
+//  arrow(O, equator(RA_Vernal_of_Date, 0));
+  dashed();
+  pen(Black(1.0)); Ecliptic_epoch_back.draw();
+  pen(Blue(1.2)); Ecliptic_back.draw();
+  pen(Red(1.2)); Equator_back.draw();
+  solid();
+  pen(Blue(1.2));
+
+  label_color(Blue(1.0));
+  label_angle(I*0);
+//  dotS(ecliptic(lambda0, 0));
+  label(ecliptic(lambda0, 0)*1.0, P(5,0), "perihelion",r);
+  font_size("tiny");
+  label(ecliptic(-0.6*Omega, 0)*1.0, P(3,-3), "$(\\Omega$)",b);
+  label(ecliptic(0.5*lambda0, 0)*1.0, P(3,0), "$(\\Lambda$)",r);
+  font_size("normal");
+
+
+  label(ecliptic(lambda0, 0)*1.0, P(5,0), "perihelion",r);
+  label(ecliptic(0.3),P(0,0.0), "ecliptic",  t);
+  label_color(Black(1.0));
+  label_angle(0);
+
+  label(ecliptic_epoch(0.4),P(0,-4), "reference",  b);
+  label_color(Black(1.0));
+  label_angle(0);
+
+
+
+
+  label_color(Red(1.0));
+  label(ecliptic_epoch(-Psi()+0.02) + 0.5*(
+    ecliptic(Longitude_Vernal_of_Date+0.02) - ecliptic_epoch(-Psi()+0.02)), 
+      P(0,5), "$\\varepsilon^\\star}$",c);
+
+  label( ecliptic(Longitude_Vernal_of_Date + 0.05) - 0.5*(
+    ecliptic(Longitude_Vernal_of_Date + 0.05) - equator(RA_Vernal_of_Date + 0.05)), 
+      P(0,0), "$\\varepsilon$", c);
+
+  label_angle(-0.3*Obliquity);
+  dot(equator(0.0));
+  label(equator(0.13),P(0,0.0), "equator",  b);
+  label_color(Black(1.0));
+  label_angle(0);
+
+
+  P pole = sph ( 1.,  0.5 + Longitude_Vernal_of_Date + Omega,  0.25 - Obliquity ) ; 
+  pen(Red(1.0)); 
+  label_color(Red(1.0)); 
+  line_style(". - ");
+  line ( pole * 0.00, pole);
+  dot(pole); 
+
+//  dot(sph(1., Psi(), 0  ));
+//  S.draw();
+
+//  arrow(O, P(x,y,0));
+//  arrow(O, orbit(-Omega-lambda0, 1));
+//  arrow(O, orbit(0));
+
+//  pen(Green(1.2));
+//  arrow_Omega.draw();
+//  pen(Red(1.2));
+//  arrow_Pi.draw();
+//  arrow (O, P(0.5,0,0));
+//  arrow (O, P(0,0.5,0));
+//  arrow (O, P(0,0,0.5));
+//  label (P(1,0,0), P(5,0), "$e_x$",  t);
+//  label (P(0,1,0), P(5,0), "$e_y$",  t);
+//  label (P(0,0,1), P(5,0), "$e_z$",  t);
+
+  label(ecliptic_epoch(0) + 0.5 * (ecliptic(-Omega) - ecliptic_epoch(0)), P(-5,0), "$i$", l);
+
+  tikz_format();
+  end();
+}

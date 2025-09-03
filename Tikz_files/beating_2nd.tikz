@@ -1,0 +1,50 @@
+\begin{tikzpicture}
+  \begin{axis}[
+    width=\textwidth,
+    height=0.7\textheight,
+    axis lines=middle,
+    xlabel={$t$},
+    ylabel={Amplitude},
+    xmin=0, xmax=160,
+    ymin=-4.5, ymax=4.5,
+    xtick=\empty, ytick=\empty,
+    domain=0:160,
+    samples=600, 
+    xlabel style={at={(axis description cs:1.05,0)}, anchor=west}, % move t further right
+    ylabel style={at={(axis description cs:0,1.05)}, anchor=south}, % move Amplitude higher
+  ]
+    % frequencies
+    \pgfmathsetmacro{\fA}{0.25}
+    \pgfmathsetmacro{\fB}{0.27}
+    \pgfmathsetmacro{\fC}{0.35}
+    \pgfmathsetmacro{\fD}{0.385}
+    %
+    \pgfmathsetmacro{\wA}{2*pi*\fA}
+    \pgfmathsetmacro{\wB}{2*pi*\fB}
+    \pgfmathsetmacro{\wC}{2*pi*\fC}
+    \pgfmathsetmacro{\wD}{2*pi*\fD}
+    \pgfmathsetmacro{\wmeana}{0.5*(\wA+\wB)}
+    \pgfmathsetmacro{\wdiffa}{0.5*(\wB-\wA)}
+    \pgfmathsetmacro{\wmeanb}{0.5*(\wC+\wD)}
+    \pgfmathsetmacro{\wdiffb}{0.5*(\wC-\wD)}
+    \pgfmathsetmacro{\wdiffF}{0.5*(\wdiffa - \wdiffb)}
+    %
+    % individual waves
+%    \addplot[blue,thin] {sin(deg(\wA*x))};
+%    \addplot[red,thin] {sin(deg(\wB*x))};
+%    \addplot[green!40,thin] {sin(deg(\wC*x))};
+%    \addplot[magenta,thin] {sin(deg(\wD*x))};
+
+    % sum (beating)
+    \addplot[black,thick] {sin(deg(\wA*x)) + sin(deg(\wB*x)) + sin(deg(\wC*x)) + sin(deg(\wD*x))};
+    \addplot[black,thick] {2*cos(deg(\wdiffa*x))+ 2*cos(deg(\wdiffb*x))};
+
+    % envelopes
+    \addplot[dashed,gray] {2*cos(deg(\wdiffa*x))};
+    \addplot[dashed,gray] {-2*cos(deg(\wdiffa*x))};
+    \addplot[dashed,blue] {2*cos(deg(\wdiffb*x))};
+    \addplot[dashed,blue] {-2*cos(deg(\wdiffb*x))};
+    \addplot[dashed,blue] { 4*sin(deg(\wdiffF*x))};
+    \addplot[dashed,blue] {-4*sin(deg(\wdiffF*x))};
+  \end{axis}
+\end{tikzpicture}

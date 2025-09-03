@@ -1,0 +1,255 @@
+/* -*-ePiX-*- */
+
+#include "epix.h"
+using namespace ePiX;
+
+// compile with, e.g., elaps -DALL polyhedra.xp
+
+const double Latitude (0.15);
+const double MAX(1.2);
+const  double ECC = 0.2;
+const  double I = 08.5 / 360.;
+const  double Omega = 0.07;
+const  double lambda0 = 0.17;
+
+
+P operator* (const P& vector, const double& c){
+      return P(vector.x1()*c, vector.x2()*c, vector.x3()*c);
+}
+
+P orbit(double nu, P &p_on_plane){
+
+    double x, y, x1, y1, z;
+
+    double rho = ( 1 - ECC * ECC ) / (1 + ECC * Cos(nu));
+    double x_on_plane = rho * Cos(nu + lambda0);
+    double y_on_plane = rho * Sin(nu + lambda0);
+
+
+    x1 = x_on_plane;
+    y1 = y_on_plane * Cos (I) ;
+    z  = y_on_plane * Sin (I) ;
+
+    x = x1 * Cos (Omega) - y1 * Sin (Omega);
+    y =  +  x1 * Sin (Omega) + y1 * Cos (Omega);
+
+    P rp;
+    rp = P(x,y,z);
+    y1 = y_on_plane  ;
+
+    x = x1 * Cos (Omega) - y1 * Sin (Omega);
+    y = + x1 * Sin (Omega) + y1 * Cos (Omega);
+    p_on_plane = P(x,y,0);
+
+    return(rp);
+}
+
+ P orbit(double nu, int on_epoch = 0){
+
+    double x, y, x1, y1, z;
+
+    double rho = ( 1 - ECC * ECC ) / (1 + ECC * Cos(nu));
+    double x_on_plane = rho * Cos(nu + lambda0);
+    double y_on_plane = rho * Sin(nu + lambda0);
+
+
+    x1 = x_on_plane;
+    y1 = y_on_plane * Cos (I) ;
+    z  = y_on_plane * Sin (I) ;
+
+    x = x1 * Cos (Omega) - y1 * Sin (Omega);
+    y =  +  x1 * Sin (Omega) + y1 * Cos (Omega);
+
+    P rp;
+    rp = P(x,y,z);
+
+    if (on_epoch == 1){
+    y1 = y_on_plane  ;
+
+    x = x1 * Cos (Omega) - y1 * Sin (Omega);
+    y = + x1 * Sin (Omega) + y1 * Cos (Omega);
+    rp = P(x,y,0);
+    }
+ 
+
+    return(rp);
+}
+
+ 
+
+int main()
+{
+  double colatitude = 0.25 - Latitude;
+  picture(P(-MAX,-MAX),P(MAX,MAX), "12x12cm");
+  begin();
+  camera.at(P(3, -1, 1));
+ 
+  revolutions(); // set angle units
+//  camera.roll(-(0.25-Latitude));
+  
+  pen(Black()); // coordinate grid
+ solid();
+
+  P O=sph(0,0,0);
+  Sphere S;
+ 
+  double rho, x, y, z, x_on_plane, y_on_plane;
+  double x1, y1, x2, y2, nu;
+
+  P p_date, p_epoch;
+  path Ecliptic;
+  path Ecliptic_epoch;
+
+  path arrow_Omega;
+  path arrow_Omega_projected;
+  path arrow_Pi; 
+
+  for (double nu = 0.0; nu < 1 ;  nu = nu + 0.01){
+  
+    p_date = orbit (nu, p_epoch);
+
+    Ecliptic.pt(O+p_date);
+    Ecliptic_epoch.pt(O+p_epoch);
+
+  }
+
+  for (double nu = -Omega - lambda0; nu <= -lambda0 ;  nu = nu + 0.01){
+  
+    p_date = orbit (nu, p_epoch);
+    arrow_Omega_projected.pt(O+p_date);
+    arrow_Omega.pt(O+p_epoch);
+
+  }
+
+  for (double nu = -lambda0; nu < 0 ;  nu = nu + 0.01){
+  
+    p_date = orbit (nu, p_epoch);
+    arrow_Pi.pt(O+p_date);
+
+  }
+
+
+
+
+
+
+  Ecliptic.close();
+    Ecliptic_epoch.close();
+
+  fill(Blue(2.2));
+//  rect(P(-1,-1,0), P(1,1,0));
+  Ecliptic_epoch.fill();
+  Ecliptic_epoch.draw();
+
+
+  path Ecliptic_back = Ecliptic;
+  clip_box(P(-3,-3, -0.0 ), P(3,3,3));
+  solid();
+  Ecliptic.clip();
+  pen(Blue(0.8));
+  Ecliptic.draw();
+  pen(Black(1.0));
+  clip_restore();
+  clip_box(P(-3,-3, 0 ), P(3,3,-3));
+  Ecliptic_back.clip();
+  dashed();
+  Ecliptic_back.draw();
+  solid();
+//  S.draw();
+
+  clip_box();
+  arrow(O, P(x,y,0));
+//  arrow(O, orbit(-lambda0));
+//  arrow(O, orbit(-Omega-lambda0, 1));
+  pen(Red(1.2));
+  label_color(Red(1.2));
+//  arrow(O, orbit(0));
+
+// semi-major axis
+  
+  P CenterEllipse = Segment(orbit(0, 0),  orbit( 0.5, 0) ).midpoint();
+  line(orbit(0, 0), orbit(0.5, 0));
+  dot(CenterEllipse);
+  line(CenterEllipse, orbit( 0.5, 0));
+  label(Segment(CenterEllipse, orbit( 0.5, 0) ).midpoint(), P(0,-5), "$a$");
+  label(Segment(CenterEllipse, P(0,0,0) ).midpoint(), P(0,-5), "$ae$", b);
+  label(Segment(orbit(0,0), P(0,0,0) ).midpoint(), P(0,-5), "$a(1-e)$", b);
+  
+// show angle i 
+  pen(Red(1.2));
+  label_color(Red(1.2));
+  bbold();
+  P idown;
+  P itop = orbit(-Omega-lambda0,idown);
+  line(itop, idown);
+  label(Segment(itop, idown).midpoint(), P(-2,0), "$i$",  l);
+
+  solid();
+  plain();
+
+// omega arrow
+  bbold();
+  pen(Green(0.9));
+  label_color(Green(0.9));
+
+  arrow_Omega.draw();
+  arrow(orbit(-lambda0-0.01, 1), orbit(-lambda0, 1));
+  label (orbit(-lambda0 - Omega /2, 1), P(0,3),  "$\\Omega$", t);
+  plain();
+  arrow_Omega_projected.draw();
+  solid();
+
+  font_size("tiny");
+  label (orbit(-lambda0 - Omega /2, 1), P(0,-12),  "$(\\Omega)$", b);
+  font_size("normal");
+ 
+
+  // longitude of perihelion
+  bbold();
+  label_color(Blue(0.8));
+  pen(Blue(0.8));
+  label (orbit((-Omega - lambda0)/2, 0), P(8,-8),  "$\\Lambda$", t);
+  label (orbit(0.3, 0), P(4,2), "ecliptic", t);
+  arrow(orbit(-0.01, 0), orbit(0, 0));
+  arrow_Pi.draw();
+
+// axes (halved)
+  label_color(Black(0.8));
+  label (orbit(0.2, 1), P(4,2), "reference", b);
+  pen(Black(0.8));
+  arrow (O, P(0.5,0,0));
+  arrow (O, P(0,0.5,0));
+  arrow (O, P(0,0,0.5));
+  label (P(0.6,0,0), P(5,0), "$e_x$",  l);
+  label (P(0,0.6,0), P(-5,0), "$e_y$",  t);
+  label (P(0,0,0.6), P(5,0), "$e_z$",  t);
+  plain();
+  arrow (O, P(1.2,0,0));
+  label (P(1.2,0,0), P(5,-3), "$\\aries_0$",  b);
+  label (orbit(0,0), P(2,3), "perihelion",  r);
+
+
+// position the point somewhore on the orbit and show the true anomaly
+//
+ 
+  pen(Black(1.0)); label_color(Black(1.0));
+  P earth_on_orbit = orbit(0.2, 0);
+  path show_angle; 
+ for (double nu = 0.0; nu < 0.2 ;  nu = nu + 0.03){
+  
+    p_date = orbit (nu, p_epoch);
+    show_angle.pt(p_date);
+
+  }
+
+  bbold();
+  dashed(); 
+  show_angle.draw();
+  arrow(orbit(0.19), orbit(0.2)); 
+  label(orbit ( 0.1, 0), P(5,3), "$\\nu$", r);
+  label(orbit ( 0.2, 0), P(0,0), "$\\earth$", c);
+
+
+  tikz_format();
+  end();
+}

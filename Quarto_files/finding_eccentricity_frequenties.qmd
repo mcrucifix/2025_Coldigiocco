@@ -1,0 +1,148 @@
+
+---
+title: "Calculating Eccentricity Periods"
+format: html
+self-contained: true
+---
+
+
+
+## Introduction
+
+In this exercise, we will use a set of fundamental frequencies, often denoted as $g_i$, to calculate a simplified version of the orbital eccentricity, $e$. These frequencies are derived from celestial mechanics and describe the long-term behavior of planetary orbits.
+
+```{r}
+# Load the vector of g_terms from Laskar's 1988 article
+g_terms <- c(5.5689, 7.4555, 17.3769, 17.9217, 4.2489, 27.9606, 3.0695, 0.6669)
+
+# Create a nice table for the students to see the values
+laskar_terms_table <- data.frame(
+  Term = paste0("g", 1:8),
+  Value = g_terms
+)
+
+# Display the table
+knitr::kable(laskar_terms_table, caption = "Laskar's g_terms as defined in the 1988 article")
+```
+
+
+The formula we will use for this demonstration is a simplified form of a more complex expression from celestial mechanics:
+
+$$e = \sqrt{ \sum (\sin (g_i t + \phi_i))^2 + \sum (\cos (g_i t + \phi_i))^2 }$$
+
+We will break down the calculation into a few key steps to make it easy to follow.
+
+```{r}
+
+#| include: false
+
+library(gtseries)
+
+```
+
+## Step 1: Unit Conversion
+
+The frequencies, $g_i$, are typically given in **arcseconds per year ($''$/yr)**. For our calculations, we need to convert them to **radians per kiloyear (rad/kyr)** to be consistent with the time variable, $t$, which we'll use in kiloyears.
+
+To do this, we need to multiply our initial values by a series of conversion factors.
+
+* To convert arcseconds to radians, we use the fact that $2\pi$ radians is equal to $360 \times 60 \times 60$ arcseconds. So the conversion factor is $\frac{2\pi}{360 \times 60 \times 60}$.
+* To convert years to kiloyears, we simply multiply by 1000.
+
+Can you justify why these terms are necessary for the conversion?
+
+```{r}
+# Convert g_terms from arcseconds/year to radians/kiloyear
+# Conversion factor: (2 * pi / (360 * 60 * 60)) * 1000
+conversion_factor <- (2 * pi / (360 * 60 * 60)) * 1000
+
+# Apply the conversion to create a new vector
+g_rad_kyr <- g_terms * conversion_factor
+
+# Display the new vector
+g_rad_kyr
+
+```
+
+The formula includes a phase term, $\phi_i$. In a full calculation, these phases are crucial, but for this illustrative purpose, we can simplify our problem. We will assume all phase terms are zero, i.e., $\phi_i = 0$.
+
+
+## Step 2: Calculating Eccentricity
+
+For this calculation, we will use the first two frequency terms, $g_2$ and $g_5$. We will also choose an arbitrary time, $t$, in kiloyears, for our calculation. Let's use $t=8$ Myr.
+
+```{r}
+# Let's define our time in kiloyears
+t <- seq(8192)
+
+# Extract the first two frequencies and their corresponding phases
+
+# Calculate the arguments for the sine functions
+arguments1 <- (g_rad_kyr[2] * t) 
+arguments2 <- (g_rad_kyr[5] * t)
+
+# Calculate the components for the formula. Note the parentheses correction.
+esinPi <- (sin(arguments1) + sin(arguments2))
+ecosPi <- (cos(arguments1) + cos(arguments2))
+
+
+# Apply the full formula with the two sums
+eccentricity_calc <- sqrt(esinPi^2 + ecosPi^2)
+
+# we make it as a timeseries object 
+eccentricity_calc_ts <- ts(eccentricity_calc, deltat=1)
+
+# Display the final calculated eccentricity
+plot(eccentricity_calc_ts)
+
+```
+
+## Step 3: Spectral Analysis with gtseries
+
+Now that we have our time series for eccentricity, we can use the `gtseries` package to look at its spectral content. This will show us which frequencies contribute to the overall signal.
+
+First, let's look at the spectrum of the `eccentricity_calc_ts` time series. The `mfft_real` function helps us find the discrete spectrum.
+
+```{r}
+require(gtseries)
+# Calculate the real spectrum of the eccentricity time series
+real_spectrum <- mfft_real(eccentricity_calc_ts)
+
+# Plot the spectrum to see the dominant frequencies
+print(real_spectrum)
+plot(real_spectrum)
+
+```
+
+Notice that the spectrum of the full eccentricity signal does **not** simply show the initial $g_1$ and $g_2$ frequencies. Because the eccentricity is a non-linear combination of these terms (specifically, it involves squares and a square root), the resulting spectrum shows new, prominent frequencies. The most dominant peaks correspond to the sum and difference frequencies of the initial terms, such as $g_3-g_4$. This is fundamental... and not surprising. Think that eccentricity is the _enveloppe_ of the precession signal ($e\sin\Pi$). As we have seen in the theory of beatings, it will only include differences (and because this enveloppe is here rectified, it also contains many harmonic, higher-order terms)
+
+## Step 4: Identifying Key Eccentricity Periods
+
+Now for a little detective work! Take a look at the spectral plot you just generated. Can you identify any of the most famous eccentricity periods?
+
+Remember that the relationship between frequency ($\omega$) and period ($P$) is given by the following formula:
+
+$$P = \frac{2\pi}{\omega}$$
+
+The most prominent cycles in Earth's orbital eccentricity are the **100-kyr, 400-kyr, and 2.4-Myr cycles**. Can you see these reflected in the spectrum? You should see that the most prominent peaks correspond to the difference frequencies we just discussed. See if you can justify where these major periods come from.
+
+## Step 5: Combining Frequencies and Exploring Hierarchy
+
+We've seen how combining just two frequencies creates a beat signal. Now, let's explore this further by combining more frequencies. Based on our exercises on beatings, we know that the combination of different sine waves will produce a complex signal with new frequencies corresponding to the differences of the original frequencies.
+
+This exercise will show the hierarchy of the 100-ka, 400-ka, and 2.4-Ma cycles in Earth's eccentricity. These are some of the most important periods in cyclostratigraphy analysis. 
+
+Your challenge is to:
+
+1.  **Add more terms** to the eccentricity calculation in **Step 3**. Try adding a third term, perhaps `g_rad_kyr[3]`, and see how the resulting spectrum changes.
+2.  **Identify the new beat frequencies** that appear in the spectrum. You should be able to spot the frequencies corresponding to the 100-ka and 400-ka periods.
+3.  **Think about the hierarchy.** What is the relatioship that we expect between the phases of the 100-ka, 400-ka and 2.4 Ma ? One key aspect that I would like you to see, is that the 100-ka cycles _vanishes_ near 2.4 Ma nodes. Can you show this ? 
+
+
+To do this, I give you a help with a little helper function: 
+
+```{r}
+get_period <- function(one, two) {2*pi/abs( g_rad_kyr[one]  - g_rad_kyr[two])}
+```
+
+but it won't be enough. I also need to tell you a little secret: in the spectrum of eccentricity, you can also get third-order and even fourth-order combinations. And the other little secret: the so-called "404-ka" signal is actually made of two components: 404-ka and a weaker 486-ka component. 

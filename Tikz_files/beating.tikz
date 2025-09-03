@@ -1,0 +1,35 @@
+\begin{tikzpicture}
+  \begin{axis}[
+    width=\textwidth,
+    height=0.7\textheight,
+    axis lines=middle,
+    xlabel={$t$},
+    ylabel={Amplitude},
+    xmin=0, xmax=80,
+    ymin=-2.5, ymax=2.5,
+    xtick=\empty, ytick=\empty,
+    domain=0:80,
+    samples=600, 
+    xlabel style={at={(axis description cs:1.05,0)}, anchor=west}, % move t further right
+    ylabel style={at={(axis description cs:0,1.05)}, anchor=south}, % move Amplitude higher
+  ]
+    % frequencies
+    \pgfmathsetmacro{\fA}{0.25}
+    \pgfmathsetmacro{\fB}{0.265}
+    \pgfmathsetmacro{\wA}{2*pi*\fA}
+    \pgfmathsetmacro{\wB}{2*pi*\fB}
+    \pgfmathsetmacro{\wmean}{0.5*(\wA+\wB)}
+    \pgfmathsetmacro{\wdiff}{0.5*(\wB-\wA)}
+
+    % individual waves
+    \addplot[blue,thin] {sin(deg(\wA*x))};
+    \addplot[red,thin] {sin(deg(\wB*x))};
+
+    % sum (beating)
+    \addplot[black,thick] {sin(deg(\wA*x)) + sin(deg(\wB*x))};
+
+    % envelopes
+    \addplot[dashed,gray] {2*cos(deg(\wdiff*x))};
+    \addplot[dashed,gray] {-2*cos(deg(\wdiff*x))};
+  \end{axis}
+\end{tikzpicture}
