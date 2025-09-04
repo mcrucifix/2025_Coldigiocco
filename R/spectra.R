@@ -69,7 +69,7 @@ EBre73s_theory <- eccentricity_spectrum(Bre73$epi)
 plot(Per_EBre73ts, xlim=c(5e-7, 1.e-4), main = "Bretagnon 1973")
 lines(abs(EBre73s_theory$Freq) , EBre73s_theory$Amp^2, col='lightskyblue1', type='h')
 lines(abs(Mfft_EBre73ts$Freq) , Mfft_EBre73ts$Amp^2, col='red', type='h')
-lines(Per_EBre73ts$Freq, EBre73ts$Power, lwd=2)
+lines(Per_EBre73ts$Freq, Per_EBre73ts$Power, lwd=2)
 
 # Morlet plots
 
