@@ -7,7 +7,7 @@ PDF_DIR = Pdf_output
 XP_DIR = Xp_files
 EEPIC_DIR = Eepic
 
-MISC_SPECTRA: R/EPi_spectrum_plot.pdf R/E_spectrum_plot.pdf R/cwt_E.png 
+MISC_SPECTRA =  R/EPi_spectrum_plot.pdf R/E_spectrum_plot.pdf R/cwt_E.png 
 MISC = R/ZB20_eccentricity.png R/ZB23_01_eccentricity.png  $(MISC_SPECTRA)
 
 REPO_URL := $(shell git config --get remote.github.url)
@@ -22,7 +22,8 @@ Presentation = $(PDF_DIR)/$(JOBNAME)_presentation.pdf
 Handouts     = $(PDF_DIR)/$(JOBNAME)_handouts.pdf
 
 # Rule to generate PDF from LaTeX and PNGs
-presentation: $(JOBNAME).tex $(PNG) $(EEPIC) | $(PDF_DIR)
+
+presentation: $(JOBNAME).tex $(PNG) $(EEPIC) $(MISC) | $(PDF_DIR)
 	pdflatex -jobname $(PDF_DIR)/2025_Coldigiocco_presentation "\PassOptionsToClass{beamer}{beamer}\input{2025_Coldigiocco.tex}"
 
 
@@ -70,20 +71,16 @@ bibtex:
 	fi
 
 
-R/ZB20_eccentricity.png: zeebe_spectrum.R
+R/ZB20_eccentricity.png: R/zeebe_spectrum.R
 	cd R  && Rscript zeebe_spectrum.R && cd .. 
 
 
-R/ZB23_01_eccentricity.png: zeebe_big_spectrum.R
+R/ZB23_01_eccentricity.png: R/zeebe_big_spectrum.R
 	cd R  && Rscript zeebe_big_spectrum.R && cd .. 
 
-MISC_SPECTRA: spectra.R
+$(MISC_SPECTRA): R/spectra.R
 	cd R && Rscript spectra.R && cd .. 
 
-
-MISC_SPECTRA: 
-R/
-	R/ZB23_01_eccentricity.png R/cwt_E.png R/EPi_spectrum_plot.pdf R/E_spectrum_plot.pdf
 
 
 clean:
