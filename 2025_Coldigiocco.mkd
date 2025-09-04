@@ -215,11 +215,13 @@ attention: often $g$ and $s$ are given in arcsecond / kyr. The period is then gi
     - Zeebe 2023 (first to be fully open source, based on models available) : \url{https://github.com/rezeebe/orbitN}
     - best to reassess resonances involving the inner planets
 
-## Effect of non-linearity: broadening and background
+## Effect of non-linearity: broadening and background (g-terms)
 
-IF I HAVE TIME : SHOW ANALYTICAL VS LA10
+\includegraphics{R/EPi_spectrum_plot.pdf}
 
-![](La10_spectrum_widening.pdf)
+## Remember: the eccentricity spectrum is messy 
+
+\includegraphics{R/E_spectrum_plot.pdf}
 
 \scriptsize{\fullcite{Laskar11aa} see also exercise by ACDS}
 
@@ -237,7 +239,7 @@ We introduce here a crucial resonance, which we will further inspect once we hav
 
 ## The 404-ka bomb
 
-STILL TO DO 
+\includegraphics{R/ZB23_01_eccentricity.png}
 
 \scriptsize{\fullcite{zeebe24aa}}
 
