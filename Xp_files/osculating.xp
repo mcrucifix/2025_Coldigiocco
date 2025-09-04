@@ -6,7 +6,7 @@ using namespace ePiX;
 // compile with, e.g., elaps -DALL polyhedra.xp
 
 const double Latitude (0.15);
-const double MAX(1.2);
+const double MAX(.9);
 const  double ECC = 0.2;
 const  double I = 08.5 / 360.;
 const  double Omega = 0.07;
@@ -80,7 +80,7 @@ P orbit(double nu, P &p_on_plane){
 int main()
 {
   double colatitude = 0.25 - Latitude;
-  picture(P(-MAX,-MAX),P(MAX,MAX), "12x12cm");
+  picture(P(-MAX,-MAX),P(MAX,MAX), "9x9cm");
   begin();
   camera.at(P(3, -1, 1));
  
