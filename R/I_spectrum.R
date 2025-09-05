@@ -12,6 +12,10 @@ P$Power = P$Power * N
 # from rotations per kry to arcsec per year
 P$Freq  = P$Freq * 3.6 * 360 
 
+pdf("I_spectrum.pdf")
+plot (P)
+dev.off()
+
 ## TODO : ENCODE A COMPLEX PERIODOGRAM
 ## AND ADD AN OPTION TO RETURN AMPLITUDE RATHER THAN POWER
 

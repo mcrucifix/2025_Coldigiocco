@@ -8,7 +8,7 @@ XP_DIR = Xp_files
 EEPIC_DIR = Eepic
 
 MISC_SPECTRA =  R/EPi_spectrum_plot.pdf R/E_spectrum_plot.pdf R/cwt_E.png 
-MISC = R/ZB20_eccentricity.png R/ZB23_01_eccentricity.png  $(MISC_SPECTRA)
+MISC = R/ZB20_eccentricity.png R/ZB23_01_eccentricity.png R/I_spectrum.pdf $(MISC_SPECTRA)
 
 REPO_URL := $(shell git config --get remote.github.url)
 COMMIT_HASH := $(shell git rev-parse --short HEAD)
@@ -77,6 +77,9 @@ R/ZB20_eccentricity.png: R/zeebe_spectrum.R
 
 R/ZB23_01_eccentricity.png: R/zeebe_big_spectrum.R
 	cd R  && Rscript zeebe_big_spectrum.R && cd .. 
+
+R/I_spectrum.pdf: R/I_spectrum.R
+	cd R  && Rscript I_spectrum.R && cd .. 
 
 $(MISC_SPECTRA): R/spectra.R
 	cd R && Rscript spectra.R && cd .. 
