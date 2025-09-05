@@ -1,9 +1,8 @@
 - show two solutions with different k terms
 
-- visualise two different precession rates. We could use the fresh Julia code ? 
-
-- redo the eccentricity wavelet plot and comment it. It would be nice to superimpose it to the time series. 
+- visualise two different precession rates. We could use the fresh Julia code ? Counting is the important stuff
 
 - anotate the g spectrum with 'g' terms 
+- anotate the i spectrum with 'g' terms 
 
-- precession also causes chaos
+- precession also causes chaos : conclude
