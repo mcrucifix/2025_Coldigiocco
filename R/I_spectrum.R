@@ -6,7 +6,11 @@ N <- length(kh)
 
 hann <- 0.5 * (1 - cos(2*pi*seq(0, N-1)/N)) 
 
-P <- gtseries::periodogram(hann*kh)
+P <- gtseries::periodogram_complex(hann*kh)
+
+P$Power = P$Power * N
+# from rotations per kry to arcsec per year
+P$Freq  = P$Freq * 3.6 * 360 
 
 ## TODO : ENCODE A COMPLEX PERIODOGRAM
 ## AND ADD AN OPTION TO RETURN AMPLITUDE RATHER THAN POWER
