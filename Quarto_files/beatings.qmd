@@ -15,8 +15,8 @@ In this document, we will explore how simple sine waves can interact to produce 
 Before starting, make sure you have installed the package `gtseries`, which contains useful functions for spectral analysis, including the wavelet transform. You can install it with:
 
 ```r
-# install.packages("devtools")
-# devtools::git_install("https://forge.uclouvain.be/mcrucifix/tseries.git")
+install.packages("devtools")
+devtools::github_install("mcrucifix/tseries.git")
 ```
 
 Then, load it:

@@ -82,14 +82,14 @@ For reference, the La88 "s-terms" are as follows. They have been slightly update
 
 | Term | Value    |
 |------|---------:|
-| *I*₁ | -5.6043  |
-| *I*₂ | -7.0530  |
-| *I*₃ | -18.8499 |
-| *I*₄ | -17.7614 |
-| *I*₅ | 0.0000   |
-| *I*₆ | -26.3300 |
-| *I*₇ | -2.9854  |
-| *I*₈ | -0.6917  |
+| *s*₁ | -5.6043  |
+| *s*₂ | -7.0530  |
+| *s*₃ | -18.8499 |
+| *s*₄ | -17.7614 |
+| *s*₅ | 0.0000   |
+| *s*₆ | -26.3300 |
+| *s*₇ | -2.9854  |
+| *s*₈ | -0.6917  |
 
 Be carefull, as usual Laskar provides these numbers in units of arc seconds per year. 
 

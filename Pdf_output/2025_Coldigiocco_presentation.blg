@@ -1,4 +1,4 @@
-This is BibTeX, Version 0.99d (TeX Live 2022/dev/Debian)
+This is BibTeX, Version 0.99d (TeX Live 2023/Debian)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: Pdf_output/2025_Coldigiocco_presentation.aux
 The style file: biblatex.bst
@@ -19,47 +19,47 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: Pdf_output/2025_Coldigiocco_presentation-blx.bib
 Database file #2: references.bib
-Biblatex version: 3.17
+Biblatex version: 3.19
 Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
-You've used 6 entries,
+You've used 8 entries,
             6399 wiz_defined-function locations,
-            1253 strings with 10500 characters,
-and the built_in function-call counts, 49005 in all, are:
-= -- 4103
-> -- 635
-< -- 164
-+ -- 1564
-- -- 237
-* -- 3335
-:= -- 5909
+            1273 strings with 12835 characters,
+and the built_in function-call counts, 73959 in all, are:
+= -- 6081
+> -- 1363
+< -- 224
++ -- 2786
+- -- 785
+* -- 4982
+:= -- 9245
 add.period$ -- 0
-call.type$ -- 6
-change.case$ -- 114
-chr.to.int$ -- 42
-cite$ -- 10
-duplicate$ -- 5259
-empty$ -- 4132
-format.name$ -- 372
-if$ -- 9725
+call.type$ -- 8
+change.case$ -- 130
+chr.to.int$ -- 72
+cite$ -- 14
+duplicate$ -- 7842
+empty$ -- 6059
+format.name$ -- 548
+if$ -- 14168
 int.to.chr$ -- 0
-int.to.str$ -- 14
+int.to.str$ -- 19
 missing$ -- 0
-newline$ -- 248
-num.names$ -- 272
-pop$ -- 1933
+newline$ -- 346
+num.names$ -- 351
+pop$ -- 2766
 preamble$ -- 1
-purify$ -- 155
+purify$ -- 192
 quote$ -- 0
-skip$ -- 1078
+skip$ -- 1452
 stack$ -- 0
-substring$ -- 7427
-swap$ -- 940
-text.length$ -- 130
+substring$ -- 11232
+swap$ -- 1351
+text.length$ -- 193
 text.prefix$ -- 0
 top$ -- 1
-type$ -- 192
+type$ -- 260
 warning$ -- 0
-while$ -- 764
+while$ -- 1149
 width$ -- 0
-write$ -- 243
+write$ -- 339
