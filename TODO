@@ -1,8 +1,3 @@
-- show two solutions with different k terms
-
-- visualise two different precession rates. We could use the fresh Julia code ? Counting is the important stuff
-
 - anotate the g spectrum with 'g' terms 
-- anotate the i spectrum with 'g' terms 
 
-- precession also causes chaos : conclude
+

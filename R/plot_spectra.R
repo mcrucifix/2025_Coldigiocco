@@ -60,7 +60,9 @@ CairoPNG(filename = FILENAME,
          units = "cm", dpi = dpi, pointsize=6)
 
 par(mfrow=c(1,1))
-plot(MELa10a, main = "La10", xlab = 'time (ka)')
+
+attr(MELa10a,"time") <- attr(MELa10a,"time") / 1.e6
+plot(MELa10a, main = "La10", xlab = 'time (Ma)')
 # plot(MEBre73ts, main = "Bre73", xlab = 'time (ka)')
 
 dev.off()

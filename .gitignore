@@ -10,3 +10,7 @@ Png/
 R/*.png
 R/*.pdf
 2025_Coldigiocco.tex
+R/Z23_morlet.RData
+R/EData.RData
+R/EPi_spectrum_plot.pdf
+R/E_spectrum_plot.pdf

@@ -1,6 +1,6 @@
-require(palinsol)
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin"require(palinsol)
 require(gtseries)
-develop(Bre73$epi, start = 50000e3, end =0, deltat=1e3)
+dfvelop(Bre73$epi, start = 50000e3, end =0, deltat=1e3)
 
 La2010a <- read.table('La2010a_alkhqp3.dat', col.names=c('time','a','l','k','h','q','p'))
 
@@ -44,40 +44,12 @@ Mfft_Bre73ts <- mfft(Bre73ts, nfreq=30, correction=2)
 Mfft_ELa10a <- mfft(ELa10a, nfreq=80, correction=2)
 Mfft_EBre73ts <- mfft(EBre73ts, nfreq=30, correction=2)
 
+MELa10a <- cwt_morlet(ELa10a)
+MEBre73ts <- cwt_morlet(EBre73ts)
 
-
-pdf('EPi_spectrum_plot.pdf')
-par(mfrow=c(2,1))
-
-plot(Per_La10a, main = "La10a", xlab="Ang. Velocity", ylab = "Power")
-lines(abs(Mfft_La10a$Freq) , Mfft_La10a$Amp^2, col='red', type='h')
-
-plot(Per_Bre73ts, main = "Bretagnon 1973", xlab = "Ang. Velocity", ylab = "Power")
-lines(abs(Mfft_Bre73ts$Freq) , Mfft_Bre73ts$Amp^2, col='red', type='h')
-lines(Bre73$epi$Freq, Bre73$epi$Amp^2, col='blue', type='h')
-dev.off()
-
-pdf('E_spectrum_plot.pdf')
-par(mfrow=c(2,1))
-
-plot(Per_ELa10a, xlim=(c(5e-7, 1.e-4)), main = "La10a")
-lines(abs(Mfft_ELa10a$Freq) , Mfft_ELa10a$Amp^2, col='red', type='h')
-lines(Per_ELa10a$Freq, Per_ELa10a$Power, lwd=2)
 
 EBre73s_theory <- eccentricity_spectrum(Bre73$epi)
 
-plot(Per_EBre73ts, xlim=c(5e-7, 1.e-4), main = "Bretagnon 1973")
-lines(abs(EBre73s_theory$Freq) , EBre73s_theory$Amp^2, col='lightskyblue1', type='h')
-lines(abs(Mfft_EBre73ts$Freq) , Mfft_EBre73ts$Amp^2, col='red', type='h')
-lines(Per_EBre73ts$Freq, Per_EBre73ts$Power, lwd=2)
+save(Per_La10a, Per_Bre73ts, Mfft_La10a, Mfft_Bre73ts, Mfft_ELa10a, Mfft_EBre73ts, Per_ELa10a, Per_EBre73ts, MELa10a, MEBre73ts, EBre73s_theory,  file="EData.RData")
 
-# Morlet plots
-
-dev.off()
-png('cwt_E.png', height=1024, width = 1400)
-par(mfrow=c(2,1))
-plot(cwt_morlet(ELa10a), main = "La10", xlab = 'time (ka)')
-plot(cwt_morlet(EBre73ts), main = "Bre73", xlab = 'time (ka)')
-
-dev.off()
 

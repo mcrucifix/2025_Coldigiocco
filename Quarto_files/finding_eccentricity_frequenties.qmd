@@ -116,17 +116,7 @@ plot(real_spectrum)
 
 Notice that the spectrum of the full eccentricity signal does **not** simply show the initial $g_1$ and $g_2$ frequencies. Because the eccentricity is a non-linear combination of these terms (specifically, it involves squares and a square root), the resulting spectrum shows new, prominent frequencies. The most dominant peaks correspond to the sum and difference frequencies of the initial terms, such as $g_3-g_4$. This is fundamental... and not surprising. Think that eccentricity is the _enveloppe_ of the precession signal ($e\sin\Pi$). As we have seen in the theory of beatings, it will only include differences (and because this enveloppe is here rectified, it also contains many harmonic, higher-order terms)
 
-## Step 4: Identifying Key Eccentricity Periods
-
-Now for a little detective work! Take a look at the spectral plot you just generated. Can you identify any of the most famous eccentricity periods?
-
-Remember that the relationship between frequency ($\omega$) and period ($P$) is given by the following formula:
-
-$$P = \frac{2\pi}{\omega}$$
-
-The most prominent cycles in Earth's orbital eccentricity are the **100-kyr, 400-kyr, and 2.4-Myr cycles**. Can you see these reflected in the spectrum? You should see that the most prominent peaks correspond to the difference frequencies we just discussed. See if you can justify where these major periods come from.
-
-## Step 5: Combining Frequencies and Exploring Hierarchy
+## Step 4: Combining Frequencies and Exploring Hierarchy
 
 We've seen how combining just two frequencies creates a beat signal. Now, let's explore this further by combining more frequencies. Based on our exercises on beatings, we know that the combination of different sine waves will produce a complex signal with new frequencies corresponding to the differences of the original frequencies.
 

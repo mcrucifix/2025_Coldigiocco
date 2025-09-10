@@ -249,5 +249,131 @@
     \field{journaltitle}{Astronomy \& Astrophysics}
     \field{year}{2022}
   \endentry
+
+  \entry{Huybers10aa}{article}{}
+    \name{author}{2}{}{%
+      {{hash=HP}{%
+         family={Huybers},
+         familyi={H\bibinitperiod},
+         given={P.},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=AO}{%
+         family={Aharonson},
+         familyi={A\bibinitperiod},
+         given={O.},
+         giveni={O\bibinitperiod},
+      }}%
+    }
+    \keyw{eccentricity, orbital tuning, astronomical forcing, Astronomical
+  forcing, Spectral analysis}
+    \strng{namehash}{HPAO1}
+    \strng{fullhash}{HPAO1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2010}
+    \field{labeldatesource}{}
+    \field{abstract}{%
+    The accuracy of geologic chronologies can, in principle, be improved
+  through orbital tuning, the systematic adjustment of a chronology to bring
+  the associated record into greater alignment with an orbitally derived
+  signal. It would be useful to have a general test for the success of orbital
+  tuning, and one proposal has been that eccentricity ought to covary with the
+  amplitude envelope associated with precession variability recorded in tuned
+  geologic records. A common procedure is to filter a tuned geologic record so
+  as to pass precession period variability and compare the amplitude modulation
+  of the resulting signal against eccentricity. There is a reasonable
+  expectation for such a relationship to be found in paleoclimate records
+  because the amplitude of precession forcing depends upon eccentricity.
+  However, there also exists a relationship between eccentricity and the
+  frequency of precession such that orbital tuning generates eccentricity-like
+  amplitude modulation in filtered signals, regardless of the accuracy of the
+  chronology or the actual presence of precession. This relationship results
+  from the celestial mechanics governing eccentricity and precession and from
+  the interaction between frequency modulation and amplitude modulation caused
+  by filtering. When the eccentricity of Earth's orbit is small, the frequency
+  of climatic precession undergoes large variations and less precession energy
+  is passed through a narrow-band filter. Furthermore, eccentricity-like
+  amplitude modulation is routinely obtained from pure noise records that are
+  orbitally tuned to precession and then filtered. We conclude that the
+  presence of eccentricity-like amplitude modulation in precession-filtered
+  records does not support the accuracy of orbitally tuned time scales.%
+    }
+    \field{number}{4}
+    \field{title}{Orbital tuning, eccentricity, and the frequency modulation of
+  climatic precession}
+    \verb{url}
+    \verb http://dx.doi.org/10.1029/2010PA001952
+    \endverb
+    \field{volume}{25}
+    \field{journaltitle}{Paleoceanography}
+    \field{year}{2010}
+    \warn{\item Invalid format of field 'date' \item Invalid format of field
+  'date'}
+  \endentry
+
+  \entry{Laskar04}{article}{}
+    \name{author}{7}{}{%
+      {{hash=LJ}{%
+         family={Laskar},
+         familyi={L\bibinitperiod},
+         given={J.},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=RP}{%
+         family={Robutel},
+         familyi={R\bibinitperiod},
+         given={P.},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=JF}{%
+         family={Joutel},
+         familyi={J\bibinitperiod},
+         given={F.},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=BF}{%
+         family={Boudin},
+         familyi={B\bibinitperiod},
+         given={F.},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=GM}{%
+         family={Gastineau},
+         familyi={G\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=CACM}{%
+         family={Correia},
+         familyi={C\bibinitperiod},
+         given={A.\bibnamedelima C.\bibnamedelima M.},
+         giveni={A\bibinitperiod\bibinitdelim C\bibinitperiod\bibinitdelim
+  M\bibinitperiod},
+      }}%
+      {{hash=LB}{%
+         family={Levrard},
+         familyi={L\bibinitperiod},
+         given={B.},
+         giveni={B\bibinitperiod},
+      }}%
+    }
+    \keyw{astronomical solutions}
+    \strng{namehash}{LJ+1}
+    \strng{fullhash}{LJRPJFBFGMCACMLB1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2004}
+    \field{labeldatesource}{}
+    \verb{doi}
+    \verb 10.1051/0004-6361:20041335
+    \endverb
+    \field{pages}{261\bibrangedash 285}
+    \field{title}{A long-term numerical solution for the insolation quantities
+  of the Earth}
+    \field{volume}{428}
+    \field{journaltitle}{Astronomy and Astrophysics}
+    \field{year}{2004}
+  \endentry
 \enddatalist
 \endinput
