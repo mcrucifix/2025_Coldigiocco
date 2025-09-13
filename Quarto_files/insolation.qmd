@@ -1,0 +1,385 @@
+---
+title: "Understanding insolation power"
+format: html
+execute: 
+  echo: true
+  warning: false
+  message: false
+---
+
+
+# Introduction
+
+In this document, we will explore how insolation changes with orbital forcing, and what this implies for climate. We will use the `palinsol` package. 
+
+```{r}
+require(palinsol)
+```
+
+::: callout-warning
+
+In preparing this lecture, I realised (and acknowledge) that `palinsol` could be more user-friendly. It is
+well documented and on CRAN; there are still a few bugs though the core functions have been well validated. 
+I need to make it more accessible while preserving backwards compatibility (because `palinsol` is in `astrochron`)
+On the other hand, it was not built with the idea to keep in pace with the development of new orbital solutions. 
+Perhaps a `palinsol2` will be created, separating more neatly the computation and visualisation of insolation from the digging of
+orbital solutions. Work in progress. 
+
+:::
+
+# Basic principles
+
+## Main dependencies 
+
+Insolation is a acronym for _incoming solar radiation_. The total amount of insolation you receive over one day is expressed in Joules per meter square 
+though it is usual to divide this quantity by 86400s to obtain an _avarage daily insolation_, expressed in W/m$^2$. 
+
+This quantity itself depends:
+
+- on the Earth-Sun distance $r$ (it scales as $r^{-2}$)
+- on the Sun declination (the angle between the Sun and the equatorial plane)
+- on the latitude. 
+
+Let's break out those. 
+
+
+![](sun_course.png)
+
+## The earth-sun distance
+
+
+The Earth-Sun distance varies according to a well-known function of the _true anomaly_, the angle between the Earth and the position occupied by the Earth at perihelion, and the position
+it occupies at the time of interest. 
+
+The formula is fairly simple and derives from basic geometrical knowledge of the ellipse (see., e.g. Berger 1978), with $a$ the semi-great axis:
+
+\begin{equation}
+r = a \frac{1-e^2}{1 + e\cos\nu} \label{eq:r}
+\end{equation}
+
+The position of the Earth around the Sun can be linked with the march of the seasons by considering its _heliocentric longitude_ $\lambda^\prime$. 
+This works as follows. Consider the position of the Earth at the time of the March equinox, which is the point at which the equator plane crosses the 
+ecliptic by going in the upwards direction. By definiton, at this very time, the Sun is aligned with the point of Aries $\gamma$. True solar longitude is an
+angle to express the position of the Sun for an oberver located on Earth. Now, based on that convention, you can see that from a _heliocentric_ point of 
+view, the longitude of the Earth at the time of the March equinox is 180$^\circ$. 
+
+On the other hand, we have seen that astronomical models supply the longitude of the perihelion $\varpi^\prime$. Thus
+
+$$\lambda = \varpi + \nu$$
+
+equivalently, by plugging $\nu=\lambda^\prime-\varpi$ into equation  \eqref{eq:r} you can get the Earth-sun distance for any _heliocentric Earth longitude_, that is: 
+
+- $\lambda^\prime = 180^\circ$  (or $\pi$ radians) for the March equinox
+- $\lambda^\prime = 270^\circ$  (or $\frac{3}{2}\pi$ radians) for the June solstice 
+- $\lambda^\prime = 0^\circ$  for the September equinox
+- $\lambda^\prime = 90^\circ$  (or $\frac{\pi}{2}$ radians) for the December solstice
+
+For historical reasons, the package `palinsol` works with geocentric solar longitudes : rather than the position of the Earth around the Sun, we consider the position of the Sun 
+for an Earth-bound observer. The conversion is straigtforward:  $\varpi = \varpi^\prime + 180^\circ$ and 
+
+
+- $\lambda = 180^\circ$   for the March equinox
+- $\lambda = 270^\circ$   for the June solstice 
+- $\lambda = 0^\circ$  for the September equinox
+- $\lambda = 90^\circ$  for the December solstice
+
+Now, perhaps what interests you is to map $\nu$ (or, equivently, $\lambda$) for any time of a calender. What is, for example, $\nu$ of August 23 ?
+The typical approach is 
+
+- decide that 21st March is $\lambda=0$ (convention)
+- consider the mean anomaly $M$ which is an abstract angle that does _regularly_ a full turn in a year , with zero at perihelion
+
+\begin{displaymath}
+M = frac{\text{number of days since perihelion}}{\text{number of days in a year}}
+\end{displaymath}
+
+The equation linking $M$ and $\nu$ transcendental but excellent approximations exist (not covered here, but standard, e.g. Brouwer and Clemence; Danjon...)
+
+\begin{align*}
+\tan \frac{\nu}{2} &= \sqrt{\frac{1+e}{1-e}} \tan \frac{E}{2}  
+M &= E - e \sin E.  \\
+\end{align*}
+
+This equation satisafies a very basic fact well known since Kepler: the angular velocity of Earth ($\frac{\mathrm d\nu}{\mathrm d M}$) is inversely proportionnal to Earth-Sun distance $r$. 
+This will have another consequence: the total amount of insolation integrated over a season (or over any values)
+
+With this equation, you can recover the _mean anomaly_ at the time of March equinox : $M_m$ and the so-called _mean longitude_, the difference in mean anomaly
+spanned by Earth since its passage at March equinox. 
+
+$\ell = M - M_m$
+
+This means that we have now two complentary ways to express the time of the year:
+
+- The true solar longitude $\lambda$ which has clear square or flat angles at the season boundaries
+- The mean  longitude $\ell$, zero at March equinox, and then progresses lineraly as time goes? 
+
+Both $\ell$ and $\lambda$ do a revolution per year. 
+
+Now let's look at the consequences: 
+
+When $\varpi^\prime$ is $3\frac{\pi}{2}$ ($\varpi$ is $\frac{\pi}{2}$) you expect an extra shot of insolation at time of Northern Hemisphere solstice (21st June).
+This extra shot is proportionnal to $r^{-2}$, thus proportionnal to $2e$. 
+
+If $\varpi=90^\circ$, insolation will have a positive anomaly in June and a negative anomaly in December, both proportional to $e$, and little anomary in March and Sept. 
+If $\varpi=270^\circ$, insolation will have a positive anomaly in December and a negative anomaly in June, both proportional to $e$ etc.  
+
+This is the reason why it is custom to use the _climatic precession index_ $e\sin\varpi$ to depict insolation anomalies in June (with opposite sign ind December) 
+and, sometimes, the _climatic coprecession_ index to depict the  insolation anomalies in March (with opposite sign in June). 
+
+
+
+The globally averaged insolation, at a give time, is proportional to $r^{-2}$ as well. Precisely, with solar constant $S_0$, it is $\frac{S_0}{4}\left(\frac{a}{r}\right)^2$. 
+As over a full year, the average of $r^{-2} = \frac{1}{\sqrt{1-e^2}}$ you can have an order of magnitude of effect of eccentricity on the globally averaged insolation. It is not much, and often
+considered negligeable, but may be enough to influence significantly deep-ocean temperature and, perhaps, anoxic conditions. 
+
+## The solar declination
+
+The solar declination depicts the course of the Sun up and down the equator over time. It is straigtforwardly linked with its longitude via a spherical triangle relationship:
+
+\begin{equation}
+\sin\delta = \sin\lambda \sin\varepsilon
+\end{equation}
+
+Then, we need to factor with the duration of the day $2H$ such that $\cos H = -\tan\phi \tan\delta$, with special cases to be considered for days without sunrise / sunset. 
+
+## The final formula
+
+\begin{equation}
+W = S_0 \left(\frac{a}{r}\right)^2 (H_0 \sin\phi \sin\delta + \cos\phi\cos\delta). 
+\end{equation}
+
+You can see that the first part of the formula involves the effect of eccentricity and the longitude of the perihelion, and the second factor relates to the effect of obliquity. 
+
+# Understanding orbital effects 
+
+## The Milankovitch diagram
+
+We will visualise the distribution of insolation as a function of the time of the year and the latitude. First consider a reference orbit, assuming nul eccentricity and $\varepsilon=22.5^\circ$. That is: 
+
+```{r}
+my_orbit <- c(ecc=0, varpi=0, eps=22.5 * pi / 180. )
+# note that the angles are supplied in randians. 
+# eps is the obliquity
+M <- palinsol::Milankovitch(my_orbit)
+plot(M, levels=seq(0,50)*10)
+```
+
+::: callout-tip
+Observe that there are two local maxima in each Hemisphere : they both occur on the day of the Solstic, one at mid-latitudes sun high on horizon, at high latitudes (longuest days). At the equator, the sun passes twice at the zenith, generating two local maxima over the year: one at the March equinox, and one at the Spring equinox. 
+:::
+
+
+## Precession effect
+
+::: callout-warning
+
+Change in precession does not affect annual mean insolation (it does not affect the total insolation received over two bounds of true solar longitude)
+
+:::
+
+### Visualise on the Milankovitch diagram
+
+Consider two cases with eccentricity = 0.05, but with different longitudes of the perihelion
+
+```{r}
+Orbit_JS <- c(ecc=0.05, varpi=90 * pi/180,  eps=22.5 * pi / 180. )  # perihelion at June solstice
+Orbit_DS <- c(ecc=0.05, varpi=270 * pi/180, eps=22.5 * pi / 180. )  # perihelion at December solstice
+# note that the angles are supplied in randians. 
+# eps is the obliquity
+
+Longitude_effect <- ( Milankovitch ( Orbit_DS)
+  -  Milankovitch ( Orbit_JS))
+plot ( Longitude_effect , main = "Per. in Dec minus per. in June")
+```
+
+
+
+Now compare this with the zero-eccentricity case: 
+
+```{r}
+Ecc_effect <- ( palinsol::Milankovitch ( Orbit_DS) 
+  -  palinsol::Milankovitch ( my_orbit ))
+plot ( Ecc_effect , main = "Per. in Dec minus neutral config")
+```
+
+### Visualise on a time series
+
+We will take a true orbital solution; a bit outdated bit it will do the job for our purpose. Consider one million years, but freeze obliquity, to isolate the compound effect of precession and eccentricity. We consider one reference time of the year, the June solstice, and a series of latitudes, from 60N to 60S
+
+ 
+```{r}
+Latitudes <- seq(-60,60,30)
+Times <- seq(-1000, 0, 1)*1e3   # times in years
+Orbits <- lapply ( Times, ber78 ) # generate a list of orbits for all times
+
+# We keep this list in memory, but create another list with frozen obliquity
+
+Orbits_constant_obl <- Orbits
+for (i in seq(along=Orbits_constant_obl)) {Orbits_constant_obl[[i]]['eps'] = 23.5 * pi / 180 } 
+
+
+Series_constant_obl_JS <- 
+lapply ( Latitudes, function ( lat) 
+  sapply ( Orbits_constant_obl, function (orbit) palinsol::Insol(orbit, long = 90 * pi/180, lat = lat * pi / 180))
+)
+
+# same for March equinox
+Series_constant_obl_ME <- 
+lapply ( Latitudes, function ( lat) 
+  sapply ( Orbits_constant_obl, function (orbit) palinsol::Insol(orbit, long = 0 * pi/180, lat = lat * pi / 180))
+)
+
+# same for December solstice
+Series_constant_obl_DS <- 
+lapply ( Latitudes, function ( lat) 
+  sapply ( Orbits_constant_obl, function (orbit) palinsol::Insol(orbit, long = 270 * pi/180, lat = lat * pi / 180))
+)
+
+
+
+### I need to comment to explain what this line is doing 
+
+
+## For visualisation purpose, we will, for each curve, - substract the mean - divide by 3 - add the latitude in degrees. 
+## Given that I will need do do this again, I create a function
+
+plot_my_series <- function (Latitudes, Series_of_Insolations, ... ) {
+
+# healthy check 
+if ( length (Latitudes)  != length ( Series_of_Insolations)) stop ("both inputs should have same length")
+
+plot (c(1,1), c(1,1), type='n', xlim = c(-1000, 0), ylim = c(-90, 90),  ... )
+
+for (i in seq(along = Series_of_Insolations)){
+      sernor <- (Series_of_Insolations[[i]] - 
+           mean(Series_of_Insolations[[i]]) ) /  3 + Latitudes [[i]]
+      lines (Times / 1000. , sernor)
+    }
+}
+
+par(mfrow=c(1,3))
+plot_my_series (Latitudes, Series_constant_obl_JS, main = "June Solstice")
+plot_my_series (Latitudes, Series_constant_obl_ME, main = "March Equinox")
+plot_my_series (Latitudes, Series_constant_obl_DS, main = "December Solstice")
+mtext("Precession / Ecc effect", 3, outer=TRUE )
+par(mfrow=c(1,1))
+```
+
+## Obliquity effect
+
+We do the same : I am in a rush
+
+```{r}
+
+Orbit_HO <- c(ecc=0.00, varpi=0,  eps=24.5 * pi / 180. )  #
+Orbit_LO <- c(ecc=0.00, varpi=0, eps=21.5 * pi / 180. )  #
+# note that the angles are supplied in radians. 
+# eps is the obliquity
+
+Obliquity_effect <- ( palinsol::Milankovitch ( Orbit_HO) -  palinsol::Milankovitch ( Orbit_LO))
+plot ( Obliquity_effect )
+```
+
+### Obliquity on anual mean insolation
+
+```{r}
+FineLatitudes <- seq(-90,90,1)
+AnnualMean_HO <- AnnualMean(Orbit_HO, lats = FineLatitudes)
+AnnualMean_LO <- AnnualMean(Orbit_LO, lats = FineLatitudes)
+
+plot(AnnualMean_HO, col='black', xlim=c(150,450))
+lines(AnnualMean_LO, FineLatitudes, col='red')
+
+legend('topright', c("High Obl", "Low Obl"), col=c('black','red'))
+
+### Obliquity in time series
+
+
+```{r}
+Orbits_zero_ecc <- Orbits
+for (i in seq(along=Orbits_zero_ecc)) {Orbits_zero_ecc[[i]]['ecc'] = 0 } 
+
+
+Series_zero_ecc <- 
+lapply ( Latitudes, function ( lat) 
+  sapply ( Orbits_zero_ecc, function (orbit) Insol(orbit, long = 90 * pi/180, lat = lat * pi / 180))
+)
+
+plot_my_series(Latitudes, Series_zero_ecc, main = "Obliquity effect")
+```
+
+
+::: callout-tip
+
+Observe the constrasting effect according to latitude
+
+:::
+
+## Compound effects
+
+```{r}
+
+Series <- 
+lapply ( Latitudes, function ( lat) 
+  sapply ( Orbits, function (orbit) Insol(orbit, long = 90 * pi/180, lat = lat * pi / 180))
+)
+
+plot_my_series(Latitudes, Series, main =  "Full effect -- June Solstice")
+```
+
+::: callout 
+
+- Precession tends to dominate obliquity on daily insolation  at most latitudes, except near the polor night. 
+- However, the effect of obliquity becomes larger when considering an average over a period of time. Consider, here, the average insolation over summer: 
+
+:::
+
+### Effect on a season average
+
+```{r}
+Series_SA <- 
+lapply ( Latitudes, function ( lat) 
+  sapply ( Orbits, function (orbit) Insol_l1l2(orbit,  avg = TRUE, 
+    l1 = 00 * pi/180, l2 = 180 * pi/180, lat = lat * pi / 180))
+)
+
+
+plot_my_series(Latitudes, Series_SA, main =  "Full effect --  Summer average")
+
+```
+
+## Caloric insolation
+
+(todo)
+
+# Eccentricity in spectra
+
+## Equatorial insolation and the double-precession effect
+
+
+## Eccentricity signature: the rectification model (for monsoon)
+
+::: callout-warning
+
+Eccentricity only appears in insolation spectra as a tiny peak, associated with the effect on globally averaged insolatino (the $\sqrt{1-e^2}$) effect, which is much smaller than effects associated with the redistributions over seasons and latitudes. 
+
+:::
+
+```r
+require(gtseries)
+plot(mfft(ts(Series[[1]], 
+ start = -1000, deltat = 1)))
+```
+
+If eccentricity appears in climate records as a direct peak, this is mainly due to two effects 
+
+- rectification: positive anomalies of precession have more climatic effects than a negative anomalies, resulting in a net effect over a cycle 
+
+- non-linear dynamics : the succession of precession and obliquity cycles produces accumulating effects which, combined with threshold effects, can produce cycles more or less solidly locked on eccenticity. 
+
+Both effects will result in different spectra. 
+
+- Case (1) will be associated with the full spectrum of eccentricity, displaying 100-ka and 400-ka cycles. This is what you expect for monsoon. 
+
+Case (2) will generally pick up the 100-ka cycle (at least for glacial cycles.)
+

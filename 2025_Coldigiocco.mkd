@@ -37,16 +37,17 @@ $\boxed{\Pi = \Lambda + \Omega}$ is the longitude of the perehilon _in the refer
 
 ## The beauty of the Keplerian orbit... 
 
-\ldots is that all Keplerian elements are constant, except the "mean longitude" $\ell$ which is defined such as to vary linealy in time. 
+\ldots is that all Keplerian elements are constant, except the "mean longitude" $\ell$ which is defined such as to vary linearly in time. 
 
 - Celestial mechanics is an _art_ of chosing the right variables to make the solution look as simple as possible. Astronomers look for _constant of motions_ : things that are unchanged along the trajectory. 
 
 - The  approach used since the XIXth century   is a bit more abstract  but the idea is there. 
 
-### the "mean longitude" is linked to angles you can really measure: 
+### the "mean longitude" is linked to angles you can really measure (more details in the Quarto file)
 
 \begin{align*}
-\ell &= E - e \sin E.  \\
+\ell = M-M_m \\
+M &= E - e \sin E.  \\
 \tan \frac{\nu}{2} &= \sqrt{\frac{1+e}{1-e}} \tan \frac{E}{2}  
 \end{align*}
 
@@ -73,7 +74,7 @@ Nowadays we use complex numbers ($\imath = \sqrt{-1}$):
 
 \begin{align*}
 z = k + \imath h &= \underbrace{e \cos \Pi}_k + \imath e \underbrace{\sin Pi}_{h} \\
-\zeta = q + \imath p &= \underbrace{\sin\frac{i}{2}\cos \Omega}_q + \imath e \underbrace{\frac{i}{2}\sin \Omega}_{p} \\
+\zeta = q + \imath p &= \underbrace{\sin\frac{i}{2}\cos \Omega}_q + \imath  \underbrace{\sin\frac{i}{2}\sin \Omega}_{p} \\
 \end{align*}
 
 
@@ -358,7 +359,7 @@ prompting evolution models of dissipation. Resonances are possible.
 
 ![](zeebelourens.png)
 
-\fullcite{zeebe24aa}
+\fullcite{zeebe22ab}
 
 
 ## Slow (slowing) trend in precession means precession was faster in the past

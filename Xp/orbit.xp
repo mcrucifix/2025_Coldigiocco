@@ -1,0 +1,202 @@
+
+#include "epix.h"
+using namespace ePiX;
+
+// compile with, e.g., elaps -DALL polyhedra.xp
+
+const double MAX(1.2);
+const double MAX3(0.8);
+
+const double LAMBDA(283.);
+//const double EPS(23.5);
+
+#define EPS 23.5
+
+#define ECC  0.10
+#define XEE (ECC*ECC)
+#define XEC (XEE*ECC)
+#define XSE (sqrt(1.-XEE))
+#define ONETHIRD (1./3.)
+#define EPSPI (EPS*M_PI/180.)
+#define MINIEARTHRADIUS (0.1)
+
+
+double nu2mu(double nu){    // true to mean anomaly in degrees
+ double Nu = nu*M_PI/180. ;
+ double Mu = Nu - 2.*((ECC/2. + XEC/8.)*(1+XSE)*sin(Nu) -
+   XEE/4.*(0.5+XSE)*sin(2.*Nu) + XEC/8.*(ONETHIRD+XSE)*
+   sin(3*Nu));
+ double mu = Mu * 180. / M_PI;
+ return(mu);
+}
+
+double mu2nu (double mu){   // mean to true anomaly in deg
+  double Mu = mu * M_PI / 180 ; 
+  double Nu = Mu + (2.*ECC - XEC/4.)*sin(Mu) +
+    5./4. * XEE * sin(2.  * Mu) + 
+    13./12. * XEC * sin( 3. * Mu );
+  double nu = Nu * 180. / M_PI ; 
+  return (nu);
+}
+
+
+void drawEarth (P O){
+  Sphere S(O, MINIEARTHRADIUS);
+
+
+
+
+  fill(Blue(1.2));
+  S.draw();
+  path Equator;
+  for (int i=0; i < 360; i=i+3){
+    double l = double(i)*M_PI/180.;
+    double y = MINIEARTHRADIUS*sin(l)*cos(EPSPI);
+    double x = MINIEARTHRADIUS*cos(l);
+    double z = MINIEARTHRADIUS*sin(l)*sin(EPSPI);
+    Equator.pt(O+P(x,y,z));
+  }
+ 
+  path Equator_back = Equator;
+  Equator.clip_to(S, cam().viewpt(), true);
+  Equator_back.clip_to(S, cam().viewpt(), false);
+  solid();
+  Equator.draw();
+  dashed();
+  Equator_back.draw();
+  solid();
+
+  pen(Red(1.2));
+  path Ecliptic;
+  for (int i=0; i < 360; i=i+3){
+    double l = double(i)*M_PI/180.;
+    double y = MINIEARTHRADIUS*sin(l);
+    double x = MINIEARTHRADIUS*cos(l);
+    double z = 0. ;
+    Ecliptic.pt(O+P(x,y,z));
+  }
+ 
+  path Ecliptic_back = Ecliptic;
+  Ecliptic.clip_to(S, cam().viewpt(), true);
+  Ecliptic_back.clip_to(S, cam().viewpt(), false);
+  solid();
+  Ecliptic.draw();
+  dashed();
+  Ecliptic_back.draw();
+  solid();
+  pen(Black(1.2));
+
+
+
+
+
+  for (int i=-1; i < 2; i=i+2){
+   path PoleSymbol;
+   for (int j=0; j < 4; j=j+1){
+   P pole = P(0, -double(i)*double(1.+j/10.)*MINIEARTHRADIUS*sin(EPSPI),
+              double(i)*double(1.+j/10.)*MINIEARTHRADIUS*cos(EPSPI));
+   PoleSymbol.pt(O+pole);
+   }
+//   PoleSymbol.clip_to(S, cam().viewpt(), true);
+   PoleSymbol.draw();
+  }
+
+
+
+}
+   
+int main()
+{
+  picture(P(-MAX,-MAX3),P(MAX,MAX3), "12cm x 8cm");
+  begin();
+  camera.at(P(5, 0, 2.25));
+ 
+  degrees(); // set angle units
+//  camera.roll(-(0.25-Latitude));
+  
+  pen(Black()); // coordinate grid
+ solid();
+ 
+  // we take that LAMBDA is the longitude of perihelion
+  // we infer that the true anomaly of the spring equinox
+  // is (2*pi - LAMBDA)
+
+  // true anomaly of the spring equinoxe
+  double nu_se = 360. - LAMBDA ; 
+
+  // mean anomaly of the spring equinoxe
+
+  double mu_se = nu2mu(nu_se);
+
+ 
+  fill (Blue(1.5));
+  path Plane;
+ 
+  Plane.pt(P(-1.3,-1.3,0));
+  Plane.pt(P(-1.3, 1.3,0));
+  Plane.pt(P( 1.0, 1.3,0));
+  Plane.pt(P( 1.0, -1.3,0));
+
+//  for (int iday=0; iday < 360; iday = iday + 3){
+//       double mu = mu_se + double(iday);
+//       double nu = mu2nu ( mu );
+//       Plane.pt(sph(1.0, nu, 0));
+//      }
+      Plane.close();
+      Plane.fill();
+      Plane.draw();
+
+//   }
+
+   P O=sph(0,0,0);
+   Sphere Sun = Sphere(O, 0.1);
+ 
+  for (int iday=0; iday < 360; iday = iday + 3){
+    // true anomaly
+      double mu = mu_se + double(iday);
+      double nu = mu2nu ( mu );
+      double R  = (1. - XEE)/(1. + ECC * Cos(nu));
+      P X = sph(R, nu - nu_se, 0);
+      dot (X);
+      }
+
+
+  for (int ilam=0; ilam < 360; ilam = ilam + 30){
+    // true anomaly
+      double nu = mu2nu (  mu_se + double(ilam) ) ;
+      double R  = (1. - XEE)/(1. + ECC * Cos(nu));
+      P X = sph(R, nu - nu_se, 0);
+      drawEarth (X);
+
+      pen(Red(1.2));
+      dashed();
+      dash_size(0.01);
+      P x0 = sph(0.1, nu - nu_se, 0);
+      P x1 = sph(R-MINIEARTHRADIUS, nu - nu_se, 0);
+      line(x0, x1);
+      pen(Black(1.0));
+      solid();
+      label_color(Red(1.0));
+      dot(x1);
+      label_color(Black(1.0));
+
+      }
+
+
+   // true anomaly of the gamma point
+
+   {
+      double nu = nu_se + 180. ;
+      double R  = (1. - XEE)/(1. + ECC * Cos(nu));
+      P x0 = sph(MINIEARTHRADIUS, nu - nu_se, 0);
+      P x1 = sph(R+.7, nu - nu_se, 0);
+      arrow(x0, x1);
+      label(x1, P(0,7), "$\\aries$");
+   }
+
+   fill(Red(1.2));
+   Sun.draw();
+
+  tikz_format();
+  end();
+}
