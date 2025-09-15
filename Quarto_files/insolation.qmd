@@ -10,7 +10,7 @@ execute:
 
 # Introduction
 
-In this document, we will explore how insolation changes with orbital forcing, and what this implies for climate. We will use the `palinsol` package. 
+In this document, we will_ explore how insolation changes with orbital forcing, and what this implies for climate. We will use the `palinsol` package. 
 
 ```{r}
 require(palinsol)
@@ -130,11 +130,11 @@ and, sometimes, the _climatic coprecession_ index to depict the  insolation anom
 
 The globally averaged insolation, at a give time, is proportional to $r^{-2}$ as well. Precisely, with solar constant $S_0$, it is $\frac{S_0}{4}\left(\frac{a}{r}\right)^2$. 
 As over a full year, the average of $r^{-2} = \frac{1}{\sqrt{1-e^2}}$ you can have an order of magnitude of effect of eccentricity on the globally averaged insolation. It is not much, and often
-considered negligeable, but may be enough to influence significantly deep-ocean temperature and, perhaps, anoxic conditions. 
+considered negligible, but may be enough to influence significantly deep-ocean temperature and, perhaps, anoxic conditions. 
 
 ## The solar declination
 
-The solar declination depicts the course of the Sun up and down the equator over time. It is straigtforwardly linked with its longitude via a spherical triangle relationship:
+The solar declination depicts the course of the Sun up and down the equator over time. It is straightforwardly linked with its longitude via a spherical triangle relationship:
 
 \begin{equation}
 \sin\delta = \sin\lambda \sin\varepsilon
@@ -154,11 +154,11 @@ You can see that the first part of the formula involves the effect of eccentrici
 
 ## The Milankovitch diagram
 
-We will visualise the distribution of insolation as a function of the time of the year and the latitude. First consider a reference orbit, assuming nul eccentricity and $\varepsilon=22.5^\circ$. That is: 
+We will visualise the distribution of insolation as a function of the time of the year and the latitude. First consider a reference orbit, assuming zero eccentricity and $\varepsilon=22.5^\circ$. That is: 
 
 ```{r}
 my_orbit <- c(ecc=0, varpi=0, eps=22.5 * pi / 180. )
-# note that the angles are supplied in randians. 
+# note that the angles are supplied in randiants. 
 # eps is the obliquity
 M <- palinsol::Milankovitch(my_orbit)
 plot(M, levels=seq(0,50)*10)
@@ -280,7 +280,7 @@ Obliquity_effect <- ( palinsol::Milankovitch ( Orbit_HO) -  palinsol::Milankovit
 plot ( Obliquity_effect )
 ```
 
-### Obliquity on anual mean insolation
+### Obliquity on annual mean insolation
 
 ```{r}
 FineLatitudes <- seq(-90,90,1)
@@ -329,7 +329,7 @@ plot_my_series(Latitudes, Series, main =  "Full effect -- June Solstice")
 
 ::: callout 
 
-- Precession tends to dominate obliquity on daily insolation  at most latitudes, except near the polor night. 
+- Precession tends to dominate obliquity on daily insolation  at most latitudes, except near the polar night. 
 - However, the effect of obliquity becomes larger when considering an average over a period of time. Consider, here, the average insolation over summer: 
 
 :::
