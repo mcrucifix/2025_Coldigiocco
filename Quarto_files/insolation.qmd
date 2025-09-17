@@ -32,7 +32,7 @@ orbital solutions. Work in progress.
 ## Main dependencies 
 
 Insolation is a acronym for _incoming solar radiation_. The total amount of insolation you receive over one day is expressed in Joules per meter square 
-though it is usual to divide this quantity by 86400s to obtain an _avarage daily insolation_, expressed in W/m$^2$. 
+though it is usual to divide this quantity by 86400s to obtain an _average daily insolation_, expressed in W/m$^2$. 
 
 This quantity itself depends:
 
@@ -59,8 +59,8 @@ r = a \frac{1-e^2}{1 + e\cos\nu} \label{eq:r}
 
 The position of the Earth around the Sun can be linked with the march of the seasons by considering its _heliocentric longitude_ $\lambda^\prime$. 
 This works as follows. Consider the position of the Earth at the time of the March equinox, which is the point at which the equator plane crosses the 
-ecliptic by going in the upwards direction. By definiton, at this very time, the Sun is aligned with the point of Aries $\gamma$. True solar longitude is an
-angle to express the position of the Sun for an oberver located on Earth. Now, based on that convention, you can see that from a _heliocentric_ point of 
+ecliptic by going in the upwards direction. By definition, at this very time, the Sun is aligned with the point of Aries $\gamma$. True solar longitude is an
+angle to express the position of the Sun for an observer located on Earth. Now, based on that convention, you can see that from a _heliocentric_ point of 
 view, the longitude of the Earth at the time of the March equinox is 180$^\circ$. 
 
 On the other hand, we have seen that astronomical models supply the longitude of the perihelion $\varpi^\prime$. Thus
@@ -74,8 +74,7 @@ equivalently, by plugging $\nu=\lambda^\prime-\varpi$ into equation  \eqref{eq:r
 - $\lambda^\prime = 0^\circ$  for the September equinox
 - $\lambda^\prime = 90^\circ$  (or $\frac{\pi}{2}$ radians) for the December solstice
 
-For historical reasons, the package `palinsol` works with geocentric solar longitudes : rather than the position of the Earth around the Sun, we consider the position of the Sun 
-for an Earth-bound observer. The conversion is straigtforward:  $\varpi = \varpi^\prime + 180^\circ$ and 
+For historical reasons, the package `palinsol` works with geocentric solar longitudes : rather than the position of the Earth around the Sun, we consider the position of the Sun for an Earth-bound observer. The conversion is straightforward:  $\varpi = \varpi^\prime + 180^\circ$ and 
 
 
 - $\lambda = 180^\circ$   for the March equinox
@@ -83,7 +82,7 @@ for an Earth-bound observer. The conversion is straigtforward:  $\varpi = \varpi
 - $\lambda = 0^\circ$  for the September equinox
 - $\lambda = 90^\circ$  for the December solstice
 
-Now, perhaps what interests you is to map $\nu$ (or, equivently, $\lambda$) for any time of a calender. What is, for example, $\nu$ of August 23 ?
+Now, perhaps what interests you is to map $\nu$ (or, equivalently, $\lambda$) for any time of a calender. What is, for example, $\nu$ of August 23 ?
 The typical approach is 
 
 - decide that 21st March is $\lambda=0$ (convention)
@@ -100,7 +99,7 @@ The equation linking $M$ and $\nu$ transcendental but excellent approximations e
 M &= E - e \sin E.  \\
 \end{align*}
 
-This equation satisafies a very basic fact well known since Kepler: the angular velocity of Earth ($\frac{\mathrm d\nu}{\mathrm d M}$) is inversely proportionnal to Earth-Sun distance $r$. 
+This equation satisfies a very basic fact well known since Kepler: the angular velocity of Earth ($\frac{\mathrm d\nu}{\mathrm d M}$) is inversely proportional to Earth-Sun distance $r$. 
 This will have another consequence: the total amount of insolation integrated over a season (or over any values)
 
 With this equation, you can recover the _mean anomaly_ at the time of March equinox : $M_m$ and the so-called _mean longitude_, the difference in mean anomaly
@@ -108,17 +107,17 @@ spanned by Earth since its passage at March equinox.
 
 $\ell = M - M_m$
 
-This means that we have now two complentary ways to express the time of the year:
+This means that we have now two complementary ways to express the time of the year:
 
 - The true solar longitude $\lambda$ which has clear square or flat angles at the season boundaries
-- The mean  longitude $\ell$, zero at March equinox, and then progresses lineraly as time goes? 
+- The mean  longitude $\ell$, zero at March equinox, and then progresses linearly as time goes? 
 
 Both $\ell$ and $\lambda$ do a revolution per year. 
 
 Now let's look at the consequences: 
 
 When $\varpi^\prime$ is $3\frac{\pi}{2}$ ($\varpi$ is $\frac{\pi}{2}$) you expect an extra shot of insolation at time of Northern Hemisphere solstice (21st June).
-This extra shot is proportionnal to $r^{-2}$, thus proportionnal to $2e$. 
+This extra shot is proportional to $r^{-2}$, thus proportional to $2e$. 
 
 If $\varpi=90^\circ$, insolation will have a positive anomaly in June and a negative anomaly in December, both proportional to $e$, and little anomary in March and Sept. 
 If $\varpi=270^\circ$, insolation will have a positive anomaly in December and a negative anomaly in June, both proportional to $e$ etc.  
@@ -157,15 +156,15 @@ You can see that the first part of the formula involves the effect of eccentrici
 We will visualise the distribution of insolation as a function of the time of the year and the latitude. First consider a reference orbit, assuming zero eccentricity and $\varepsilon=22.5^\circ$. That is: 
 
 ```{r}
-my_orbit <- c(ecc=0, varpi=0, eps=22.5 * pi / 180. )
-# note that the angles are supplied in randiants. 
+my_orbit <- c(ecc = 0, varpi = 0, eps = 22.5 * pi / 180.)
+# note that the angles are supplied in radians.
 # eps is the obliquity
 M <- palinsol::Milankovitch(my_orbit)
-plot(M, levels=seq(0,50)*10)
+plot(M, levels = seq(0, 50) * 10)
 ```
 
 ::: callout-tip
-Observe that there are two local maxima in each Hemisphere : they both occur on the day of the Solstic, one at mid-latitudes sun high on horizon, at high latitudes (longuest days). At the equator, the sun passes twice at the zenith, generating two local maxima over the year: one at the March equinox, and one at the Spring equinox. 
+Observe that there are two local maxima in each Hemisphere : they both occur on the day of the Solstice, one at mid-latitudes sun high on horizon, at high latitudes (longest days). At the equator, the sun passes twice at the zenith, generating two local maxima over the year: one at the March equinox, and one at the Spring equinox. 
 :::
 
 
@@ -182,14 +181,13 @@ Change in precession does not affect annual mean insolation (it does not affect 
 Consider two cases with eccentricity = 0.05, but with different longitudes of the perihelion
 
 ```{r}
-Orbit_JS <- c(ecc=0.05, varpi=90 * pi/180,  eps=22.5 * pi / 180. )  # perihelion at June solstice
-Orbit_DS <- c(ecc=0.05, varpi=270 * pi/180, eps=22.5 * pi / 180. )  # perihelion at December solstice
-# note that the angles are supplied in randians. 
+Orbit_JS <- c(ecc = 0.05, varpi = 90 * pi / 180, eps = 22.5 * pi / 180.) # perihelion at June solstice
+Orbit_DS <- c(ecc = 0.05, varpi = 270 * pi / 180, eps = 22.5 * pi / 180.) # perihelion at December solstice
+# note that the angles are supplied in radians.
 # eps is the obliquity
 
-Longitude_effect <- ( Milankovitch ( Orbit_DS)
-  -  Milankovitch ( Orbit_JS))
-plot ( Longitude_effect , main = "Per. in Dec minus per. in June")
+Longitude_effect <- (Milankovitch(Orbit_DS) - Milankovitch(Orbit_JS))
+plot(Longitude_effect, main = "Per. in Dec minus per. in June")
 ```
 
 
@@ -197,9 +195,8 @@ plot ( Longitude_effect , main = "Per. in Dec minus per. in June")
 Now compare this with the zero-eccentricity case: 
 
 ```{r}
-Ecc_effect <- ( palinsol::Milankovitch ( Orbit_DS) 
-  -  palinsol::Milankovitch ( my_orbit ))
-plot ( Ecc_effect , main = "Per. in Dec minus neutral config")
+Ecc_effect <- (Milankovitch(Orbit_DS)  - Milankovitch(my_orbit))
+plot(Ecc_effect, main = "Per. in Dec minus neutral config")
 ```
 
 ### Visualise on a time series
@@ -208,61 +205,88 @@ We will take a true orbital solution; a bit outdated bit it will do the job for 
 
  
 ```{r}
-Latitudes <- seq(-60,60,30)
-Times <- seq(-1000, 0, 1)*1e3   # times in years
-Orbits <- lapply ( Times, ber78 ) # generate a list of orbits for all times
+Latitudes <- seq(-60, 60, 30)
+Times <- seq(-1000, 0, 1) * 1e3 # times in years
+Orbits <- lapply(Times, ber78) # generate a list of orbits for all times
 
 # We keep this list in memory, but create another list with frozen obliquity
 
 Orbits_constant_obl <- Orbits
-for (i in seq(along=Orbits_constant_obl)) {Orbits_constant_obl[[i]]['eps'] = 23.5 * pi / 180 } 
-
-
-Series_constant_obl_JS <- 
-lapply ( Latitudes, function ( lat) 
-  sapply ( Orbits_constant_obl, function (orbit) palinsol::Insol(orbit, long = 90 * pi/180, lat = lat * pi / 180))
-)
-
-# same for March equinox
-Series_constant_obl_ME <- 
-lapply ( Latitudes, function ( lat) 
-  sapply ( Orbits_constant_obl, function (orbit) palinsol::Insol(orbit, long = 0 * pi/180, lat = lat * pi / 180))
-)
-
-# same for December solstice
-Series_constant_obl_DS <- 
-lapply ( Latitudes, function ( lat) 
-  sapply ( Orbits_constant_obl, function (orbit) palinsol::Insol(orbit, long = 270 * pi/180, lat = lat * pi / 180))
-)
-
-
-
-### I need to comment to explain what this line is doing 
-
-
-## For visualisation purpose, we will, for each curve, - substract the mean - divide by 3 - add the latitude in degrees. 
-## Given that I will need do do this again, I create a function
-
-plot_my_series <- function (Latitudes, Series_of_Insolations, ... ) {
-
-# healthy check 
-if ( length (Latitudes)  != length ( Series_of_Insolations)) stop ("both inputs should have same length")
-
-plot (c(1,1), c(1,1), type='n', xlim = c(-1000, 0), ylim = c(-90, 90),  ... )
-
-for (i in seq(along = Series_of_Insolations)){
-      sernor <- (Series_of_Insolations[[i]] - 
-           mean(Series_of_Insolations[[i]]) ) /  3 + Latitudes [[i]]
-      lines (Times / 1000. , sernor)
-    }
+for (i in seq(along = Orbits_constant_obl)) {
+  Orbits_constant_obl[[i]]["eps"] <- 23.5 * pi / 180
 }
 
-par(mfrow=c(1,3))
-plot_my_series (Latitudes, Series_constant_obl_JS, main = "June Solstice")
-plot_my_series (Latitudes, Series_constant_obl_ME, main = "March Equinox")
-plot_my_series (Latitudes, Series_constant_obl_DS, main = "December Solstice")
-mtext("Precession / Ecc effect", 3, outer=TRUE )
-par(mfrow=c(1,1))
+
+Series_constant_obl_JS <-
+  lapply(Latitudes, function(lat) {
+    sapply(Orbits_constant_obl, function(orbit) palinsol::Insol(orbit, long = 90 * pi / 180, lat = lat * pi / 180))
+  })
+
+# same for March equinox
+Series_constant_obl_ME <-
+  lapply(Latitudes, function(lat) {
+    sapply(Orbits_constant_obl, function(orbit) palinsol::Insol(orbit, long = 0 * pi / 180, lat = lat * pi / 180))
+  })
+
+# same for December solstice
+Series_constant_obl_DS <-
+  lapply(Latitudes, function(lat) {
+    sapply(Orbits_constant_obl, function(orbit) palinsol::Insol(orbit, long = 270 * pi / 180, lat = lat * pi / 180))
+  })
+
+## For visualisation purpose, we will, for each curve, - subtract the mean - divide by 3 - add the latitude in degrees.
+## Given that I will need do do this again, I create a function
+
+
+plot_my_series <- function(Latitudes, Series_of_Insolations, shrink = 4, ...) {
+  # healthy check
+  if (length(Latitudes) != length(Series_of_Insolations)) {
+    stop("both inputs should have same length")
+  }
+
+  plot(
+    c(1, 1),
+    c(1, 1),
+    type = "n",
+    xlim = c(-1000, 0),
+    ylim = c(-80, 80),
+    xlab = "Time",
+    ylab = "",
+    axes = FALSE,
+    frame = FALSE,
+    ...
+  )
+
+  par(las = 1)
+  for (i in seq(along = Series_of_Insolations)) {
+    ms <- mean(Series_of_Insolations[[i]])
+    transform <- function(series) {
+      (series - ms) / shrink + Latitudes[[i]]
+    }
+    sernor <- transform(Series_of_Insolations[[i]])
+    lines(Times / 1000, sernor)
+
+    lab <- ifelse(
+      Latitudes[[i]] > 0,
+      sprintf("%d N", Latitudes[[i]]),
+      sprintf("%d S", -Latitudes[[i]])
+    )
+    if (Latitudes[[i]] == 0) lab <- "Eq."
+    axis(2, at = c(Latitudes[[i]]), labels = c(lab))
+
+    rmin <- (ceiling(min(Series_of_Insolations[[i]]) / 30)) * 30
+    rmax <- (floor(max(Series_of_Insolations[[i]]) / 30)) * 30
+    if (rmin > rmax) rmax = rmin
+    axis(4, at = transform(c(rmin, rmax)), labels = c(rmin, rmax))
+  }
+}
+
+par(mfrow = c(1, 3))
+plot_my_series(Latitudes, Series_constant_obl_JS, main = "June Solstice")
+plot_my_series(Latitudes, Series_constant_obl_ME, main = "March Equinox")
+plot_my_series(Latitudes, Series_constant_obl_DS, main = "December Solstice")
+mtext("Precession / Ecc effect", 3, outer = TRUE)
+par(mfrow = c(1, 1))
 ```
 
 ## Obliquity effect
@@ -270,40 +294,42 @@ par(mfrow=c(1,1))
 We do the same : I am in a rush
 
 ```{r}
-
-Orbit_HO <- c(ecc=0.00, varpi=0,  eps=24.5 * pi / 180. )  #
-Orbit_LO <- c(ecc=0.00, varpi=0, eps=21.5 * pi / 180. )  #
-# note that the angles are supplied in radians. 
+Orbit_HO <- c(ecc = 0.00, varpi = 0, eps = 24.5 * pi / 180.) #
+Orbit_LO <- c(ecc = 0.00, varpi = 0, eps = 21.5 * pi / 180.) #
+# note that the angles are supplied in radians.
 # eps is the obliquity
 
-Obliquity_effect <- ( palinsol::Milankovitch ( Orbit_HO) -  palinsol::Milankovitch ( Orbit_LO))
-plot ( Obliquity_effect )
+Obliquity_effect <- (palinsol::Milankovitch(Orbit_HO) - palinsol::Milankovitch(Orbit_LO))
+plot(Obliquity_effect)
 ```
 
 ### Obliquity on annual mean insolation
 
 ```{r}
-FineLatitudes <- seq(-90,90,1)
+FineLatitudes <- seq(-90, 90, 1)
 AnnualMean_HO <- AnnualMean(Orbit_HO, lats = FineLatitudes)
 AnnualMean_LO <- AnnualMean(Orbit_LO, lats = FineLatitudes)
 
-plot(AnnualMean_HO, col='black', xlim=c(150,450))
-lines(AnnualMean_LO, FineLatitudes, col='red')
+plot(AnnualMean_HO, col = "black", xlim = c(150, 450))
+lines(AnnualMean_LO, FineLatitudes, col = "red")
 
-legend('topright', c("High Obl", "Low Obl"), col=c('black','red'))
+legend("topright", c("High Obl", "Low Obl"), col = c("black", "red"))
+``` 
 
 ### Obliquity in time series
 
 
 ```{r}
 Orbits_zero_ecc <- Orbits
-for (i in seq(along=Orbits_zero_ecc)) {Orbits_zero_ecc[[i]]['ecc'] = 0 } 
+for (i in seq(along = Orbits_zero_ecc)) {
+  Orbits_zero_ecc[[i]]["ecc"] <- 0
+}
 
 
-Series_zero_ecc <- 
-lapply ( Latitudes, function ( lat) 
-  sapply ( Orbits_zero_ecc, function (orbit) Insol(orbit, long = 90 * pi/180, lat = lat * pi / 180))
-)
+Series_zero_ecc <-
+  lapply(Latitudes, function(lat) {
+    sapply(Orbits_zero_ecc, function(orbit) Insol(orbit, long = 90 * pi / 180, lat = lat * pi / 180))
+  })
 
 plot_my_series(Latitudes, Series_zero_ecc, main = "Obliquity effect")
 ```
@@ -318,13 +344,12 @@ Observe the constrasting effect according to latitude
 ## Compound effects
 
 ```{r}
+Series <-
+  lapply(Latitudes, function(lat) {
+    sapply(Orbits, function(orbit) Insol(orbit, long = 90 * pi / 180, lat = lat * pi / 180))
+  })
 
-Series <- 
-lapply ( Latitudes, function ( lat) 
-  sapply ( Orbits, function (orbit) Insol(orbit, long = 90 * pi/180, lat = lat * pi / 180))
-)
-
-plot_my_series(Latitudes, Series, main =  "Full effect -- June Solstice")
+plot_my_series(Latitudes, Series, main = "Full effect -- June Solstice")
 ```
 
 ::: callout 
@@ -337,15 +362,18 @@ plot_my_series(Latitudes, Series, main =  "Full effect -- June Solstice")
 ### Effect on a season average
 
 ```{r}
-Series_SA <- 
-lapply ( Latitudes, function ( lat) 
-  sapply ( Orbits, function (orbit) Insol_l1l2(orbit,  avg = TRUE, 
-    l1 = 00 * pi/180, l2 = 180 * pi/180, lat = lat * pi / 180))
-)
+Series_SA <-
+  lapply(Latitudes, function(lat) {
+    sapply(Orbits, function(orbit) {
+      Insol_l1l2(orbit,
+        avg = TRUE,
+        l1 = 00 * pi / 180, l2 = 180 * pi / 180, lat = lat * pi / 180
+      )
+    })
+  })
 
 
-plot_my_series(Latitudes, Series_SA, main =  "Full effect --  Summer average")
-
+plot_my_series(Latitudes, Series_SA, main = "Full effect --  Summer average")
 ```
 
 ## Caloric insolation
