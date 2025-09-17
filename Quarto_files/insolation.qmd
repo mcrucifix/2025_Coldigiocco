@@ -14,6 +14,7 @@ In this document, we will explore how insolation changes with orbital forcing, a
 
 ```{r}
 require(palinsol)
+12aea
 ```
 
 ::: callout-warning
@@ -23,7 +24,9 @@ well documented and on CRAN; there are still a few bugs though the core function
 I need to make it more accessible while preserving backwards compatibility (because `palinsol` is in `astrochron`)
 On the other hand, it was not built with the idea to keep in pace with the development of new orbital solutions. 
 Perhaps a `palinsol2` will be created, separating more neatly the computation and visualisation of insolation from the digging of
-orbital solutions. Work in progress. 
+orbital solutions. Work in progress, and feedback welcome! 
+
+Please raise concerns, ask questions, or submit bug fixes or improvements is via the ![github](www.github.com/mcrucifix/palinsol) webpage of the project. 
 
 :::
 
@@ -74,7 +77,7 @@ equivalently, by plugging $\nu=\lambda^\prime-\varpi$ into equation  \eqref{eq:r
 - $\lambda^\prime = 0^\circ$  for the September equinox
 - $\lambda^\prime = 90^\circ$  (or $\frac{\pi}{2}$ radians) for the December solstice
 
-For historical reasons, the package `palinsol` works with geocentric solar longitudes : rather than the position of the Earth around the Sun, we consider the position of the Sun 
+For historical reasons, the package `palinsol` works with geocentric true solar longitudes : rather than the position of the Earth around the Sun, we consider the position of the Sun 
 for an Earth-bound observer. The conversion is straigtforward:  $\varpi = \varpi^\prime + 180^\circ$ and 
 
 
