@@ -14,3 +14,9 @@ R/Z23_morlet.RData
 R/EData.RData
 R/EPi_spectrum_plot.pdf
 R/E_spectrum_plot.pdf
+Quarto_files/insolation.rmd
+Quarto_files/package-lock.json
+Quarto_files/package.json
+Quarto_files/node_modules/.bin
+Quarto_files/node_modules/tree-sitter-cli
+Quarto_files/node_modules/.package-lock.json

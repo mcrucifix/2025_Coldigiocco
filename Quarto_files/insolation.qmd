@@ -397,8 +397,8 @@ Eccentricity only appears in insolation spectra as a tiny peak, associated with 
 
 ```{r}
 require(gtseries)
-plot(mfft(ts(Series[[1]], 
- start = -1000, deltat = 1)))
+plot(mfft(ts(Series[[1]],
+             start = -1000, deltat = 1)))
 ```
 
 If eccentricity appears in climate records as a direct peak, this is mainly due to two effects 

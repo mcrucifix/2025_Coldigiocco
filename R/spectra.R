@@ -1,6 +1,6 @@
-export PATH="$PATH:/opt/nvim-linux-x86_64/bin"require(palinsol)
+require(palinsol)
 require(gtseries)
-dfvelop(Bre73$epi, start = 50000e3, end =0, deltat=1e3)
+develop(Bre73$epi, start = 50000e3, end =0, deltat=1e3)
 
 La2010a <- read.table('La2010a_alkhqp3.dat', col.names=c('time','a','l','k','h','q','p'))
 

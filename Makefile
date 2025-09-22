@@ -9,7 +9,7 @@ EEPIC_DIR = Eepic
 
 MISC_SPECTRA =  R/EPi_spectrum_plot.pdf R/E_spectrum_plot.pdf R/cwt_E.png 
 MISC_SPECTRA_R =  R/EData.RData
-MISC = R/ZB20_eccentricity.png R/ZB23_01_eccentricity.png R/I_spectrum.pdf $(MISC_SPECTRA)
+MISC = R/ZB20_eccentricity.png R/ZB23_01_eccentricity.png R/I_spectrum.pdf $(MISC_SPECTRA) R/precession_models.pdf
 
 REPO_URL := $(shell git config --get remote.github.url)
 COMMIT_HASH := $(shell git rev-parse --symbolic --tags)
@@ -39,8 +39,8 @@ $(HTML_DIR)/%.html: $(QUARTO_DIR)/%.qmd | $(HTML_DIR)
 	quarto render $< --to html --self-contained --output-dir  $(PWD)/$(HTML_DIR) 
 
 # Rules to generate PNG snippets from HTML files
-#$(PNG_DIR)/%.png: $(HTML_DIR)/%.html | $(PNG_DIR)
-#	wkhtmltoimage --enable-local-file-access --width 400 --height 300 file://$(PWD)/$< $@
+$(PNG_DIR)/%.png: $(HTML_DIR)/%.html | $(PNG_DIR)
+	wkhtmltoimage --enable-local-file-access --width 400 --height 300 file://$(PWD)/$< $@
 
 # Rule to generate Eepic from XP files
 $(EEPIC_DIR)/%.eepic: $(XP_DIR)/%.xp | $(EEPIC_DIR)
@@ -80,13 +80,14 @@ R/ZB23_01_eccentricity.png: R/Z23_morlet.RData
 R/I_spectrum.pdf: R/I_spectrum.R
 	cd R  && Rscript I_spectrum.R && cd .. 
 
-$(MISC_SPECTRA): R/plot_spectra.R
+$(MISC_SPECTRA): R/plot_spectra.R  $(MISC_SPECTRA_R)
 	cd R && Rscript plot_spectra.R && cd ..
 
 $(MISC_SPECTRA_R): R/spectra.R
 	cd R && Rscript spectra.R && cd .. 
 
-
+R/precession_models.pdf: R/show_two_precession_models.R
+	cd R && Rscript show_two_precession_models.R && cd .. 
 
 clean:
 	rm $(JOBNAME).vrb
