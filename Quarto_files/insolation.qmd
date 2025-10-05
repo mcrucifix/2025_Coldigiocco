@@ -1,6 +1,7 @@
 ---
 title: "Understanding insolation power"
 format: html
+html-math-method: mathml
 execute: 
   echo: true
   warning: false
@@ -10,10 +11,15 @@ execute:
 
 # Introduction
 
-In this document, we will_ explore how insolation changes with orbital forcing, and what this implies for climate. We will use the `palinsol` package. 
+In cyclostratigraphy it is common to refer to Milankovitch cycles to designate the orbital, precession and obliquity cycles. In fact, Milankovitch did not contributed that much to the identification and quantification of these cycles of astronomical theory, even though he provided a solid review at the time. What he did, by contrast, is to develop a good theory of the relationship between these cycles and climate, considering the changes in energy balance of the Earth and accounting for the reflection of sunlight by snow. 
+
+A large part of his book "Canon of insolation" is devoted to the computation of insolation quantities: the _annual march of insolation_, which quantifies the distribution of insolation over latitudes and seasons, and the _secular march of insolation_ which determines of a given insolation quantity evolves over time. In this effort, he gave a particular importance to the definition and calculation of _caloric insolation_: the cumulated energy received at the top of the atmosphere over the half-part of the year that receives the largest part of it. Its computation can be a tad technical, but he considered this quantity to be the best predictor of accumulating effects, year after year, of insolation on snow and ice cover. Remember that the primary aim of Milankovitch was to provide a solid foundation to the theory that "ice-ages" are caused by the changes in insolation caused by the "movement of the poles", that is , the changes in precession and obliquity caused by planetary motion and luni-solar precession. 
+
+The present document was written for the Coldigiocco summer school of cyclostratigraphy (Sept 2025) and stands as a first draft towards a one-stop, quick teaser about how insolation changes with orbital forcing, and what this implies for climate. We will use the `palinsol` package. 
 
 ```{r}
 require(palinsol)
+12a <- 12
 ```
 
 ::: callout-warning
@@ -94,12 +100,15 @@ The typical approach is
 M = frac{\text{number of days since perihelion}}{\text{number of days in a year}}
 \end{displaymath}
 
-The equation linking $M$ and $\nu$ transcendental but excellent approximations exist (not covered here, but standard, e.g. Brouwer and Clemence; Danjon...)
+The equation linking $M$ and $\nu$ is transcendental but excellent approximations exist (not covered here, but standard, e.g. Brouwer and Clemence; Danjon...)
 
+
+$$
 \begin{align*}
-\tan \frac{\nu}{2} &= \sqrt{\frac{1+e}{1-e}} \tan \frac{E}{2}  
+\tan \frac{\nu}{2} &= \sqrt{\frac{1+e}{1-e}} \tan \frac{E}{2}  \\
 M &= E - e \sin E.  \\
 \end{align*}
+$$
 
 This equation satisfies a very basic fact well known since Kepler: the angular velocity of Earth ($\frac{\mathrm d\nu}{\mathrm d M}$) is inversely proportional to Earth-Sun distance $r$. 
 This will have another consequence: the total amount of insolation integrated over a season (or over any values)
@@ -121,7 +130,7 @@ Now let's look at the consequences:
 When $\varpi^\prime$ is $3\frac{\pi}{2}$ ($\varpi$ is $\frac{\pi}{2}$) you expect an extra shot of insolation at time of Northern Hemisphere solstice (21st June).
 This extra shot is proportional to $r^{-2}$, thus proportional to $2e$. 
 
-If $\varpi=90^\circ$, insolation will have a positive anomaly in June and a negative anomaly in December, both proportional to $e$, and little anomary in March and Sept. 
+If $\varpi=90^\circ$, insolation will have a positive anomaly in June and a negative anomaly in December, both proportional to $e$, and little anomaly in March and Sept. 
 If $\varpi=270^\circ$, insolation will have a positive anomaly in December and a negative anomaly in June, both proportional to $e$ etc.  
 
 This is the reason why it is custom to use the _climatic precession index_ $e\sin\varpi$ to depict insolation anomalies in June (with opposite sign ind December) 
@@ -137,9 +146,11 @@ considered negligible, but may be enough to influence significantly deep-ocean t
 
 The solar declination depicts the course of the Sun up and down the equator over time. It is straightforwardly linked with its longitude via a spherical triangle relationship:
 
+```{=latex}
 \begin{equation}
 \sin\delta = \sin\lambda \sin\varepsilon
 \end{equation}
+```
 
 Then, we need to factor with the duration of the day $2H$ such that $\cos H = -\tan\phi \tan\delta$, with special cases to be considered for days without sunrise / sunset. 
 
@@ -207,8 +218,9 @@ We will take a true orbital solution; a bit outdated bit it will do the job for 
 
  
 ```{r}
-Latitudes <- seq(-60, 60, 30)
+Latitudes <- seq(-60, 60, 30) 
 Times <- seq(-1000, 0, 1) * 1e3 # times in years
+Times_ky <- Times / 1e3         # times in kyr
 Orbits <- lapply(Times, ber78) # generate a list of orbits for all times
 
 # We keep this list in memory, but create another list with frozen obliquity
@@ -345,6 +357,57 @@ Observe the constrasting effect according to latitude
 
 ## Compound effects
 
+It is possible to construct a considerable number of insolation quantities: monthly insolation, seasonally-averaged insolation, seasonally-integrated (which is not the same thing), annual mean insolation, averaged or not over a range of latitudes...
+
+It turns out that _most_ (but not all) insolation quantities can be expressed as a linear combination of obliquity, precession and co-precession parameters. This as an immediate implacation as to their spectral content. To see this, let's first consider one example and work out its spectrum. The classical example that serves as our basis is insolation on the day of the June solstice at 65$^\circ$ North. It can be computed with palinsol: 
+
+
+```{r}
+JS_Insol <-
+    sapply(Orbits, function(orbit) Insol(orbit, long = 90 * pi / 180, lat = 65 * pi / 180))
+# convert into a time series object
+JS_Insol <- ts(JS_Insol, start=-1000)
+plot(Times_ky, JS_Insol)
+```
+
+Now, we construct the three constitutive elements of this insolation quantity: precession, co-precession, obliquity and eccentricity.  We normalise them. 
+
+```{r}
+obliquity_norm <- ts(scale(sapply(Orbits, function(orbit) orbit['eps'])), start=-1000)
+ecc_norm <- ts(scale(sapply(Orbits, function(orbit) orbit['ecc'])), start=-1000)
+precess_norm <- ts(scale(sapply(Orbits, function(orbit) orbit['ecc'] * sin(orbit['varpi']) )), start=-1000)
+coprecess_norm <- ts(scale(sapply(Orbits, function(orbit) orbit['ecc'] * cos(orbit['varpi']) )), start=-1000)
+```
+
+Now we want to express our insolation quantity as a linear combination of all three quantities. This is a mere linear regression problem, and `R` has built-in features to manage this: 
+
+```{r}
+decomp <- lm(scale(JS_Insol) ~ obliquity_norm + precess_norm + coprecess_norm + ecc_norm)
+print (decomp$coefficients)
+print (anova(decomposition))
+```
+
+As we see it, this June solstice insolation is fully explained (no residual) by this combination, which is dominated by precession (82% of variance), obliquity (17% of variance), and eccentricity (1 %). 
+
+The 1%-eccentricity is related to the effect of eccentricity on the mean Earth-Sun distance; a very small effect indeed. 
+
+We expect these ratios to be reflected in the spectrum. 
+
+
+The respective ratios of precession and obliquity depend on the type of insolation and latitude. As a rule of thumb: 
+
+- Obliquity becomes (often) more important when considering insolation averaged over a period of time (exceptions exist). For example, monthly mean insolation has more obliquity than insolation on the day of Summer solstice; 
+- It also becomes more important at times of the year that are closer to the polar night (e.g. winter insolation at 60 $^\circ$ North
+- Precession cancels (!) when considering insolation integrated over specific true solar longitudes (e.g. integrated over the astronomical summer), or, by extension, over the full year. 
+
+Consider this example: 
+
+TODO: INSOLATION OVER THE WHOLE SUMMER
+
+
+- Eccentricity only shows up when all other effects are cancelled, for example if we consider globally averaged insolation, oven the whole year. 
+
+
 ```{r}
 Series <-
   lapply(Latitudes, function(lat) {
@@ -380,7 +443,7 @@ plot_my_series(Latitudes, Series_SA, main = "Full effect --  Summer average")
 
 ## Caloric insolation
 
-(todo)
+Caloric insolation ... [here to develop] 
 
 # Eccentricity in spectra
 
@@ -391,7 +454,7 @@ plot_my_series(Latitudes, Series_SA, main = "Full effect --  Summer average")
 
 ::: callout-warning
 
-Eccentricity only appears in insolation spectra as a tiny peak, associated with the effect on globally averaged insolatino (the $\sqrt{1-e^2}$) effect, which is much smaller than effects associated with the redistributions over seasons and latitudes. 
+Eccentricity only appears in insolation spectra as a tiny peak, associated with the effect on globally averaged insolation (the $\sqrt{1-e^2}$) effect, which is much smaller than effects associated with the redistributions over seasons and latitudes. 
 
 :::
 
