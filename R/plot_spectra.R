@@ -1,5 +1,6 @@
 require(gtseries)
 require(palinsol)
+require(astroanalytic)
 data(Bre73)
 
 

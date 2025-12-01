@@ -19,7 +19,6 @@ The present document was written for the Coldigiocco summer school of cyclostrat
 
 ```{r}
 require(palinsol)
-12a <- 12
 ```
 
 ::: callout-warning
@@ -384,7 +383,7 @@ Now we want to express our insolation quantity as a linear combination of all th
 ```{r}
 decomp <- lm(scale(JS_Insol) ~ obliquity_norm + precess_norm + coprecess_norm + ecc_norm)
 print (decomp$coefficients)
-print (anova(decomposition))
+print (anova(decomp))
 ```
 
 As we see it, this June solstice insolation is fully explained (no residual) by this combination, which is dominated by precession (82% of variance), obliquity (17% of variance), and eccentricity (1 %). 

@@ -1,5 +1,7 @@
 require(palinsol)
 require(gtseries)
+require(astroanalytic)
+data(Bre73)
 develop(Bre73$epi, start = 50000e3, end =0, deltat=1e3)
 
 La2010a <- read.table('La2010a_alkhqp3.dat', col.names=c('time','a','l','k','h','q','p'))
@@ -38,11 +40,11 @@ Per_EBre73ts$Freq <-  Per_EBre73ts$Freq * 2*pi
 
 
 
-Mfft_La10a <- mfft(kh, nfreq=80, correction=2)
-Mfft_Bre73ts <- mfft(Bre73ts, nfreq=30, correction=2)
+Mfft_La10a <- mfft(kh, n_freq=80, correction=2)
+Mfft_Bre73ts <- mfft(Bre73ts, n_freq=30, correction=2)
 
-Mfft_ELa10a <- mfft(ELa10a, nfreq=80, correction=2)
-Mfft_EBre73ts <- mfft(EBre73ts, nfreq=30, correction=2)
+Mfft_ELa10a <- mfft(ELa10a, n_freq=80, correction=2)
+Mfft_EBre73ts <- mfft(EBre73ts, n_freq=30, correction=2)
 
 MELa10a <- cwt_morlet(ELa10a)
 MEBre73ts <- cwt_morlet(EBre73ts)

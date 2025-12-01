@@ -7,14 +7,15 @@ you need a working version of TeX and pandoc.
 you will need the latest versions of gtseries and the deep-time version of palinsol
 
 ```r
-remotes::install_github("mcrucifix/palinsol", ref = "deeppast")
+remotes::install_github("mcrucifix/palinsol")
+remotes::install_github("mcrucifix/astronalytic")
 ```
 
 
 and the lastest version of gtseries
 
 ```r
-remotes::install_github("mcrucifix/gtseries", ref = "deeppast")
+remotes::install_github("mcrucifix/gtseries")
 ```
 
 Zeebe and Laskar solutions (in R) downloaded from their respective websites (and, for Zeebe, time resolution degraded by taking 1 out of every 50 entries). That directory still needs some clean-up. They are note covered by the LICENSE. 
