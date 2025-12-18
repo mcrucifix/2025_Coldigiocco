@@ -1,0 +1,53 @@
+stages:
+  - build
+  - release # New stage
+
+build_pdf:
+  stage: build
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}-pdf-cache # Unique cache key per branch
+    paths:
+      - 'Html/*.html'
+      - 'R/EData.RData'
+      - 'R/Z23_morlet.RData'
+      - '2025_Coldigiocco_presentation.toc'
+      - '2025_Coldigiocco_presentation.snm'
+      - '2025_Coldigiocco_presentation.nav'
+      - '2025_Coldigiocco_presentation-blx.bib'
+    policy: pull-push # Default behavior: pull the cache before script, push after script
+  script:
+    - make presentation
+    - make html
+    - echo "PDF_JOB_ID=$CI_JOB_ID" > artifacts_vars.env 
+  artifacts:
+    paths:
+       - Pdf_output/2025_Coldigiocco_presentation.pdf
+       - Html/beatings.html
+       - Html/finding_eccentricity_frequenties.html
+       - Html/ob_vs_ecc_beatings.html
+       - Html/insolation.html
+    reports:
+      dotenv: artifacts_vars.env # NEW: Make variables available to subsequent jobs
+    expire_in: 1 week
+  only:
+    - main
+  when: manual
+
+create_release:
+  stage: release
+  needs:
+    - job: build # Ensures this job runs after build_pdf and inherits its artifacts
+  script:
+    - export URL="${CI_SERVER_URL}/${CI_PROJECT_PATH}/-/jobs/${PDF_JOB_ID}/artifacts/file/"
+    - |
+      glab release create "${CI_COMMIT_REF_SLUG}" \
+        --name "Release ${CI_COMMIT_SHORT_SHA}" \
+        --assets-link "{\"name\":\"2025_Coldigiocco_presentation.pdf\",\"url\":\"${URL}/2025_Coldigiocco_presentation.pdf\",\"link_type\":\"other\"}" \
+        --assets-link "{\"name\":\"beatings.html\",\"url\":\"${URL}/beatings\",\"link_type\":\"other\"}" \
+        --assets-link "{\"name\":\"finding_eccentricity_frequenties.html\/finding_eccentricity_frequenties.html",\"url\":\"${URL}\",\"link_type\":\"other\"}" \
+        --assets-link "{\"name\":\"ob_vs_ecc_beatings.html\",\"url\":\"${URL}/ob_vs_ecc_beatings.html\",\"link_type\":\"other\"}" \
+        --assets-link "{\"name\":\"insolation.html\",\"url\":\"${URL}\/insolation.html",\"link_type\":\"other\"}"
+  only:
+    - main
+  when: manual # Make this manual to control when a release is made
+
