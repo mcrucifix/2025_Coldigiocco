@@ -17,7 +17,7 @@ build:
     policy: pull-push # Default behavior: pull the cache before script, push after script
   script:
     - git submodule update
-    - echo `ls template`
+    - echo `ls templates`
     - make presentation
     - make html
     - echo "PDF_JOB_ID=$CI_JOB_ID" > artifacts_vars.env 
