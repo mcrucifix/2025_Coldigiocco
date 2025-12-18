@@ -30,7 +30,7 @@ build:
       dotenv: artifacts_vars.env # NEW: Make variables available to subsequent jobs
     expire_in: 1 week
   only:
-    - main
+    - master
   when: manual
 
 create_release:
@@ -48,6 +48,6 @@ create_release:
         --assets-link "{\"name\":\"ob_vs_ecc_beatings.html\",\"url\":\"${URL}/ob_vs_ecc_beatings.html\",\"link_type\":\"other\"}" \
         --assets-link "{\"name\":\"insolation.html\",\"url\":\"${URL}\/insolation.html",\"link_type\":\"other\"}"
   only:
-    - main
+    - master
   when: manual # Make this manual to control when a release is made
 
