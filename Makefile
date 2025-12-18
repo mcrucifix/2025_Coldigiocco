@@ -80,6 +80,10 @@ bibtex:
 R/Z23_morlet.RData: R/zeebe_big_spectrum.R
 	cd R  && Rscript zeebe_big_spectrum.R && cd .. 
 
+
+R/ZB20_eccentricity.png: R/Z23_morlet.RData
+	cd R  && Rscript zeebe_big_spectrum_plot.R && cd .. 
+
 R/ZB23_01_eccentricity.png: R/Z23_morlet.RData
 	cd R  && Rscript zeebe_big_spectrum_plot.R && cd .. 
 

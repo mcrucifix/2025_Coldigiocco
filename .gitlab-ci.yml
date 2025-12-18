@@ -27,6 +27,7 @@ build:
        - Html/finding_eccentricity_frequenties.html
        - Html/ob_vs_ecc_beatings.html
        - Html/insolation.html
+       - artifacts_vars.env
     reports:
       dotenv: artifacts_vars.env # NEW: Make variables available to subsequent jobs
     expire_in: 1 week
@@ -37,17 +38,22 @@ build:
 create_release:
   stage: release
   needs:
-    - job: build # Ensures this job runs after build_pdf and inherits its artifacts
+    - job: build
   script:
-    - export URL="${CI_SERVER_URL}/${CI_PROJECT_PATH}/-/jobs/${PDF_JOB_ID}/artifacts/file/"
+    # Base URL for artifacts from the 'build' job on this specific branch/tag
+    - export BASE_URL="${CI_PROJECT_URL}/-/jobs/artifacts/${CI_COMMIT_REF_NAME}/raw"
     - |
       glab release create "${CI_COMMIT_REF_SLUG}" \
         --name "Release ${CI_COMMIT_SHORT_SHA}" \
-        --assets-link "{\"name\":\"2025_Coldigiocco_presentation.pdf\",\"url\":\"${URL}/2025_Coldigiocco_presentation.pdf\",\"link_type\":\"other\"}" \
-        --assets-link "{\"name\":\"beatings.html\",\"url\":\"${URL}/beatings\",\"link_type\":\"other\"}" \
-        --assets-link "{\"name\":\"finding_eccentricity_frequenties.html\/finding_eccentricity_frequenties.html",\"url\":\"${URL}\",\"link_type\":\"other\"}" \
-        --assets-link "{\"name\":\"ob_vs_ecc_beatings.html\",\"url\":\"${URL}/ob_vs_ecc_beatings.html\",\"link_type\":\"other\"}" \
-        --assets-link "{\"name\":\"insolation.html\",\"url\":\"${URL}\/insolation.html",\"link_type\":\"other\"}"
+        --assets-link "{\"name\":\"Presentation PDF\",\"url\":\"${BASE_URL}/Pdf_output/2025_Coldigiocco_presentation.pdf?job=build\"}" \
+        --assets-link "{\"name\":\"Beatings HTML\",\"url\":\"${BASE_URL}/Html/beatings.html?job=build\"}" \
+        --assets-link "{\"name\":\"Eccentricity Frequencies HTML\",\"url\":\"${BASE_URL}/Html/finding_eccentricity_frequenties.html?job=build\"}" \
+        --assets-link "{\"name\":\"Ob vs Ecc Beatings HTML\",\"url\":\"${BASE_URL}/Html/ob_vs_ecc_beatings.html?job=build\"}" \
+        --assets-link "{\"name\":\"Insolation HTML\",\"url\":\"${BASE_URL}/Html/insolation.html?job=build\"}"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+      when: manual
+        --assets-link "{\"name\":\"insolation.html\",\"url\":\"${URL}\/Html/insolation.html",\"link_type\":\"other\"}"
   only:
     - master
   when: manual # Make this manual to control when a release is made
