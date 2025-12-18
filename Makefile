@@ -12,7 +12,7 @@ MISC_SPECTRA_R =  R/EData.RData
 MISC = R/ZB20_eccentricity.png R/ZB23_01_eccentricity.png R/I_spectrum.pdf $(MISC_SPECTRA) R/precession_models.pdf
 
 REPO_URL := $(shell git config --get remote.github.url)
-COMMIT_HASH := $(shell git rev-parse --symbolic --tags)
+COMMIT_HASH := $(shell git rev-parse --symbolic)
 
 # Automatically find Quarto files and define output paths
 QMD = $(wildcard $(QUARTO_DIR)/*.qmd)
@@ -58,10 +58,11 @@ $(EEPIC_DIR)/%.eepic: $(XP_DIR)/%.xp | $(EEPIC_DIR)
 $(JOBNAME).tex: $(JOBNAME).mkd header.tex
 	pandoc -s --template=templates/presentation.tex \
 	         -H header.tex \
-					 -t beamer \
-		       -V url=$(REPO_URL) \
+		 -f markdown \
+		 -t beamer \
+	         -V url=$(REPO_URL) \
 	         -V commit=$(COMMIT_HASH) \
-					 2025_Coldigiocco.mkd -o 2025_Coldigiocco.tex
+		 2025_Coldigiocco.mkd -o 2025_Coldigiocco.tex
 
 handouts: $(JOBNAME).tex $(PNG) $(EEPIC) | $(PDF_DIR)
 	pdflatex -jobname $(PDF_DIR)/2025_Coldigiocco_presentation "\PassOptionsToClass{handout}{beamer}\input{${JOBNAME).tex}"

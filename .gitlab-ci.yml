@@ -10,8 +10,19 @@ build:
       - 'Html/*.html'
       - 'R/EData.RData'
       - 'R/Z23_morlet.RData'
+      - 'R/E_spectrum_plot.pdf'
+      - 'R/I_spectrum.pdf'
       - 'Png/*.png'
       - 'R/*.png'
+      - 'Pdf_output/2025_Coldigiocco_presentation.aux'
+      - 'Pdf_output/2025_Coldigiocco_presentation.bbl'
+      - 'Pdf_output/2025_Coldigiocco_presentation.pdf'
+      - 'Pdf_output/2025_Coldigiocco_presentation.fdb_latexmk'
+      - 'Pdf_output/2025_Coldigiocco_presentation.nav'
+      - 'Pdf_output/2025_Coldigiocco_presentation.blg'
+      - 'Pdf_output/2025_Coldigiocco_presentation.snm'
+      - 'Pdf_output/2025_Coldigiocco_presentation.toc'
+      - 'Pdf_output/2025_Coldigiocco_presentation.fls'
     policy: pull-push # Default behavior: pull the cache before script, push after script
   variables:
     GIT_SUBMODULE_STRATEGY: recursive  # Or 'normal' if you don't have nested submodules
