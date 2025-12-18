@@ -47,6 +47,7 @@ build:
     - master
 
 release:
+  when: manual
   stage: release
   needs:
     - job: build
