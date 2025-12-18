@@ -53,11 +53,5 @@ release:
         --assets-link "{\"name\":\"Eccentricity Frequencies HTML\",\"url\":\"${BASE_URL}/Html/finding_eccentricity_frequenties.html?job=build\"}" \
         --assets-link "{\"name\":\"Ob vs Ecc Beatings HTML\",\"url\":\"${BASE_URL}/Html/ob_vs_ecc_beatings.html?job=build\"}" \
         --assets-link "{\"name\":\"Insolation HTML\",\"url\":\"${BASE_URL}/Html/insolation.html?job=build\"}"
-  rules:
-    - if: $CI_COMMIT_BRANCH == "master"
-      when: manual
-        --assets-link "{\"name\":\"insolation.html\",\"url\":\"${URL}\/Html/insolation.html",\"link_type\":\"other\"}"
-  only:
-    - master
   when: manual # Make this manual to control when a release is made
 
