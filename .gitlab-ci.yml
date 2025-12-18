@@ -38,7 +38,7 @@ build:
     - master
   when: manual
 
-create_release:
+release:
   stage: release
   needs:
     - job: build
