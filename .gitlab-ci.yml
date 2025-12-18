@@ -10,6 +10,7 @@ build:
       - 'Html/*.html'
       - 'R/EData.RData'
       - 'R/Z23_morlet.RData'
+      - 'Png/*.pdf'
       - 'Pdf_output/2025_Coldigiocco_presentation.fdb_latexmk'
       - 'Pdf_output/2025_Coldigiocco_presentation.toc'
       - 'Pdf_output/2025_Coldigiocco_presentation.pdf'
@@ -51,7 +52,7 @@ release:
         {"name":"Presentation PDF","url":"'$BASE_URL'/Pdf_output/2025_Coldigiocco_presentation.pdf?job=build"},
         {"name":"Beatings html","url":"'$BASE_URL'/Html/beatings.html?job=build"},
         {"name":"Insolation html","url":"'$BASE_URL'/Html/ob_vs_ecc_beatings.html?job=build"}, 
-        {"name":"Finding ecc frequencies html","url":"'$BASE_URL'/Html/finding_eccentricity_frequenties.html?job=build"} ]
+        {"name":"Finding ecc frequencies html","url":"'$BASE_URL'/Html/finding_eccentricity_frequenties.html?job=build"} ]'
     - |
       glab release create "${CI_COMMIT_TAG}" \
            --name "Release ${CI_COMMIT_TAG} with ${CI_COMMIT_SHORT_SHA}" \
