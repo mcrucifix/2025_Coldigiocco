@@ -22,7 +22,7 @@ build:
     - echo `ls templates`
     - make presentation
     - make html
-    - echo "PDF_JOB_ID=$CI_JOB_ID" > artifacts_vars.env 
+    - echo "JOB_ID=$CI_JOB_ID" > artifacts_vars.env 
   artifacts:
     paths:
        - Pdf_output/2025_Coldigiocco_presentation.pdf
@@ -43,17 +43,19 @@ release:
   needs:
     - job: build
   script:
-    # Base URL for artifacts from the 'build' job on this specific branch/tag
-    - export BASE_URL="${CI_PROJECT_URL}/-/jobs/artifacts/${CI_COMMIT_REF_NAME}/raw"
+    - git tag $RELEASE_TAG
+    - git push origin $RELEASE_TAG
+    - export RELEASE_TAG="build-${CI_COMMIT_SHORT_SHA}"
+    - export BASE_URL="${CI_PROJECT_URL}/-/jobs/artifacts/${JOB_ID}/file"
+    - ASSETS_JSON='[
+        {"name":"Presentation PDF","url":"'$BASE_URL'/Pdf_output/2025_Coldigiocco_presentation.pdf?job=build"},
+        {"name":"Beatings html","url":"'$BASE_URL'/Html/beatings.html?job=build"},
+        {"name":"Insolation html","url":"'$BASE_URL'/Html/ob_vs_ecc_beatings.html?job=build"}, 
+        {"name":"Finding ecc frequencies html","url":"'$BASE_URL'/Html/finding_eccentricity_frequenties.html?job=build"} ]
     - |
-      glab release create "${CI_COMMIT_REF_SLUG}" \
+      glab release create "${RELEASE_TAG}" \
            --name "Release ${CI_COMMIT_SHORT_SHA}" \
-           --assets-links "[ \
-             {\"name\":\"Presentation PDF\",\"url\":\"${BASE_URL}/Pdf_output/2025_Coldigiocco_presentation.pdf?job=build\"}, \
-             {\"name\":\"Beatings HTML\",\"url\":\"${BASE_URL}/Html/beatings.html?job=build\"}, \
-             {\"name\":\"Eccentricity Frequencies HTML\",\"url\":\"${BASE_URL}/Html/finding_eccentricity_frequenties.html?job=build\"}, \
-             {\"name\":\"Ob vs Ecc Beatings HTML\",\"url\":\"${BASE_URL}/Html/ob_vs_ecc_beatings.html?job=build\"}, \
-             {\"name\":\"Insolation HTML\",\"url\":\"${BASE_URL}/Html/insolation.html?job=build\"} \
-          ]"
+           --notes "Automated build from commit ${CI_COMMIT_SHA}" \
+           --assets-links "${ASSETS_JSON}" \
   when: manual # Make this manual to control when a release is made
 
