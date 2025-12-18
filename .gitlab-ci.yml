@@ -2,7 +2,7 @@ stages:
   - build
   - release # New stage
 
-build_pdf:
+build:
   stage: build
   cache:
     key: ${CI_COMMIT_REF_SLUG}-pdf-cache # Unique cache key per branch
