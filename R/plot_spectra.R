@@ -14,14 +14,10 @@ Per_Bre73ts$Freq
 print('range')
 range(Per_Bre73ts$Freq)
 
-print('ici0')
 plot(Per_Bre73ts, main = "Bretagnon 1973", xlab = "Ang. Velocity", ylab = "Power")
-print('ici01')
 lines(abs(Mfft_Bre73ts$Freq) , Mfft_Bre73ts$Amp^2, col='red', type='h')
-print('ici02')
 lines(Bre73$epi$Freq, Bre73$epi$Amp^2, col='blue', type='h')
 
-print('ici1')
 plot(Per_La10a, main = "La10a", xlab="Ang. Velocity", ylab = "Power")
 lines(abs(Mfft_La10a$Freq) , Mfft_La10a$Amp^2, col='red', type='h')
 

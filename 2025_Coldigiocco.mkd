@@ -31,7 +31,7 @@ noautomaticscaling: yes
 
 ## The angles and variables describing the orbit (Keplerian elements)
 
-\raisebox{-5cm}{\includegraphics[scale=0.9]{osculating}}
+\raisebox{-5cm}{\includegraphics[scale=0.9]{Figures/osculating}}
 
 $\boxed{\Pi = \Lambda + \Omega}$ is the longitude of the perehilon _in the reference frame_. 
 
