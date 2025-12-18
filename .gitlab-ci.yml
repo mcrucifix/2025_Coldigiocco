@@ -15,8 +15,11 @@ build:
       - '2025_Coldigiocco_presentation.nav'
       - '2025_Coldigiocco_presentation-blx.bib'
     policy: pull-push # Default behavior: pull the cache before script, push after script
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive  # Or 'normal' if you don't have nested submodules
   script:
     - git submodule update
+    - echo `ls templates`
     - make presentation
     - make html
     - echo "PDF_JOB_ID=$CI_JOB_ID" > artifacts_vars.env 
