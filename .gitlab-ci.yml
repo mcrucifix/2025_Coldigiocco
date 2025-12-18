@@ -16,6 +16,7 @@ build:
       - '2025_Coldigiocco_presentation-blx.bib'
     policy: pull-push # Default behavior: pull the cache before script, push after script
   script:
+    - git submodule update
     - make presentation
     - make html
     - echo "PDF_JOB_ID=$CI_JOB_ID" > artifacts_vars.env 
