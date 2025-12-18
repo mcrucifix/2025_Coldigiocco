@@ -10,10 +10,8 @@ build:
       - 'Html/*.html'
       - 'R/EData.RData'
       - 'R/Z23_morlet.RData'
-      - 'Png/*.pdf'
-      - 'Pdf_output/2025_Coldigiocco_presentation.toc'
-      - 'Pdf_output/2025_Coldigiocco_presentation.snm'
-      - 'Pdf_output/2025_Coldigiocco_presentation.nav'
+      - 'Png/*.png'
+      - 'R/*.png'
     policy: pull-push # Default behavior: pull the cache before script, push after script
   variables:
     GIT_SUBMODULE_STRATEGY: recursive  # Or 'normal' if you don't have nested submodules
