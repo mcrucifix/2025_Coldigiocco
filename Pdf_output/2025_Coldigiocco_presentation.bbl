@@ -1,5 +1,5 @@
 % $ biblatex auxiliary file $
-% $ biblatex bbl format version 3.2 $
+% $ biblatex bbl format version 3.3 $
 % Do not modify the above lines!
 %
 % This is an auxiliary file used by the 'biblatex' package.
@@ -16,8 +16,8 @@
   {}
 \endgroup
 
-\datalist[entry]{none/global//global/global}
-  \entry{arts24aa}{article}{}
+\datalist[entry]{none/global//global/global/global}
+  \entry{arts24aa}{article}{}{}
     \name{author}{5}{}{%
       {{hash=AM}{%
          family={Arts},
@@ -73,7 +73,7 @@
     \field{year}{2024}
   \endentry
 
-  \entry{Laskar11aa}{article}{}
+  \entry{Laskar11aa}{article}{}{}
     \name{author}{4}{}{%
       {{hash=LJ}{%
          family={Laskar},
@@ -120,7 +120,7 @@
     \field{year}{2011}
   \endentry
 
-  \entry{zeebe24aa}{article}{}
+  \entry{zeebe22ab}{article}{}{}
     \name{author}{2}{}{%
       {{hash=ZRE}{%
          family={Zeebe},
@@ -128,40 +128,39 @@
          given={R.\bibnamedelima E.},
          giveni={R\bibinitperiod\bibinitdelim E\bibinitperiod},
       }}%
-      {{hash=LML}{%
-         family={Lantink},
+      {{hash=LLJ}{%
+         family={Lourens},
          familyi={L\bibinitperiod},
-         given={M.\bibnamedelima L.},
-         giveni={M\bibinitperiod\bibinitdelim L\bibinitperiod},
+         given={L.\bibnamedelima J.},
+         giveni={L\bibinitperiod\bibinitdelim J\bibinitperiod},
       }}%
     }
     \list{publisher}{1}{%
-      {American Astronomical Society}%
+      {American Geophysical Union (AGU)}%
     }
-    \strng{namehash}{ZRELML1}
-    \strng{fullhash}{ZRELML1}
+    \strng{namehash}{ZRELLJ1}
+    \strng{fullhash}{ZRELLJ1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
-    \field{labelyear}{2024}
+    \field{labelyear}{2022}
     \field{labeldatesource}{}
     \verb{doi}
-    \verb 10.3847/1538-3881/ad32cf
+    \verb 10.1029/2021pa004349
     \endverb
-    \field{issn}{1538-3881}
-    \field{number}{5}
-    \field{pages}{204}
-    \field{title}{A Secular Solar System Resonance that Disrupts the Dominant
-  Cycle in EarthÔÇÖs Orbital Eccentricity (g 2 ÔêÆ g 5): Implications for
-  Astrochronology}
+    \field{issn}{2572-4525}
+    \field{number}{2}
+    \field{title}{A Deep‐Time Dating Tool for Paleo‐Applications Utilizing
+  Obliquity and Precession Cycles: The Role of Dynamical Ellipticity and Tidal
+  Dissipation}
     \verb{url}
-    \verb http://dx.doi.org/10.3847/1538-3881/ad32cf
+    \verb http://dx.doi.org/10.1029/2021PA004349
     \endverb
-    \field{volume}{167}
-    \field{journaltitle}{The Astronomical Journal}
-    \field{year}{2024}
+    \field{volume}{37}
+    \field{journaltitle}{Paleoceanography and Paleoclimatology}
+    \field{year}{2022}
   \endentry
 
-  \entry{waltham24aa}{article}{}
+  \entry{waltham24aa}{article}{}{}
     \name{author}{2}{}{%
       {{hash=WD}{%
          family={Waltham},
@@ -190,8 +189,8 @@
     \endverb
     \field{issn}{0012-821X}
     \field{pages}{119086}
-    \field{title}{EarthÔÇÖs precession rate evolution and rapid fall during
-  the Late Proterozoic}
+    \field{title}{Earth's precession rate evolution and rapid fall during the
+  Late Proterozoic}
     \verb{url}
     \verb http://dx.doi.org/10.1016/j.epsl.2024.119086
     \endverb
@@ -200,7 +199,7 @@
     \field{year}{2024}
   \endentry
 
-  \entry{farhat22aa}{article}{}
+  \entry{farhat22aa}{article}{}{}
     \name{author}{4}{}{%
       {{hash=FM}{%
          family={Farhat},
@@ -215,7 +214,7 @@
          giveni={P\bibinitperiod},
       }}%
       {{hash=BG}{%
-         family={Bou├®},
+         family={Bou\'e},
          familyi={B\bibinitperiod},
          given={G.},
          giveni={G\bibinitperiod},
@@ -250,7 +249,7 @@
     \field{year}{2022}
   \endentry
 
-  \entry{Huybers10aa}{article}{}
+  \entry{Huybers10aa}{article}{}{}
     \name{author}{2}{}{%
       {{hash=HP}{%
          family={Huybers},
@@ -312,7 +311,7 @@
   'date'}
   \endentry
 
-  \entry{Laskar04}{article}{}
+  \entry{Laskar04}{article}{}{}
     \name{author}{7}{}{%
       {{hash=LJ}{%
          family={Laskar},

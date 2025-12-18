@@ -10,12 +10,18 @@ pdf('EPi_spectrum_plot.pdf', width=8, height=4)
 par(mfrow=c(1,2))
 par(mar=c(3,2,2,1))
 
-Per_La10a
+Per_Bre73ts$Freq
+print('range')
+range(Per_Bre73ts$Freq)
 
+print('ici0')
 plot(Per_Bre73ts, main = "Bretagnon 1973", xlab = "Ang. Velocity", ylab = "Power")
+print('ici01')
 lines(abs(Mfft_Bre73ts$Freq) , Mfft_Bre73ts$Amp^2, col='red', type='h')
+print('ici02')
 lines(Bre73$epi$Freq, Bre73$epi$Amp^2, col='blue', type='h')
 
+print('ici1')
 plot(Per_La10a, main = "La10a", xlab="Ang. Velocity", ylab = "Power")
 lines(abs(Mfft_La10a$Freq) , Mfft_La10a$Amp^2, col='red', type='h')
 
@@ -27,13 +33,14 @@ pdf('E_spectrum_plot.pdf', width=8, height=4)
 par(mfrow=c(1,2))
 par(mar=c(3,2,2,1))
 
-
+print('ici1')
 plot(Per_EBre73ts, xlim=c(5e-7, 1.e-4), main = "Bretagnon 1973")
 lines(abs(EBre73s_theory$Freq) , EBre73s_theory$Amp^2, col='lightskyblue1', type='h')
 lines(abs(Mfft_EBre73ts$Freq) , Mfft_EBre73ts$Amp^2, col='red', type='h')
 lines(Per_EBre73ts$Freq, Per_EBre73ts$Power, lwd=2)
 
-plot(Per_ELa10a, xlim=(c(5e-7, 1.e-4)), main = "La10a")
+print('ici2')
+plot(Per_ELa10a, xlim=c(5e-7, 1.e-4), main = "La10a")
 lines(abs(Mfft_ELa10a$Freq) , Mfft_ELa10a$Amp^2, col='red', type='h')
 lines(Per_ELa10a$Freq, Per_ELa10a$Power, lwd=2)
 

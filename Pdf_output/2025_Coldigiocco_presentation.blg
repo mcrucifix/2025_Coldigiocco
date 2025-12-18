@@ -1,6 +1,6 @@
-This is BibTeX, Version 0.99d (TeX Live 2023/Debian)
+This is BibTeX, Version 0.99d (TeX Live 2025)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
-The top-level auxiliary file: Pdf_output/2025_Coldigiocco_presentation.aux
+The top-level auxiliary file: 2025_Coldigiocco_presentation.aux
 The style file: biblatex.bst
 Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
 Reallocated global_strs (elt_size=200001) to 20 items from 10.
@@ -19,47 +19,47 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: Pdf_output/2025_Coldigiocco_presentation-blx.bib
 Database file #2: references.bib
-Biblatex version: 3.19
+Biblatex version: 3.21
 Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 You've used 8 entries,
-            6399 wiz_defined-function locations,
-            1273 strings with 12835 characters,
-and the built_in function-call counts, 73959 in all, are:
-= -- 6081
-> -- 1363
-< -- 224
-+ -- 2786
+            6402 wiz_defined-function locations,
+            1272 strings with 12813 characters,
+and the built_in function-call counts, 73918 in all, are:
+= -- 6076
+> -- 1364
+< -- 225
++ -- 2787
 - -- 785
-* -- 4982
-:= -- 9245
+* -- 4973
+:= -- 9236
 add.period$ -- 0
 call.type$ -- 8
-change.case$ -- 130
+change.case$ -- 131
 chr.to.int$ -- 72
 cite$ -- 14
-duplicate$ -- 7842
-empty$ -- 6059
+duplicate$ -- 7848
+empty$ -- 6054
 format.name$ -- 548
-if$ -- 14168
+if$ -- 14161
 int.to.chr$ -- 0
 int.to.str$ -- 19
 missing$ -- 0
-newline$ -- 346
-num.names$ -- 351
-pop$ -- 2766
+newline$ -- 345
+num.names$ -- 352
+pop$ -- 2775
 preamble$ -- 1
-purify$ -- 192
+purify$ -- 193
 quote$ -- 0
-skip$ -- 1452
+skip$ -- 1455
 stack$ -- 0
-substring$ -- 11232
-swap$ -- 1351
+substring$ -- 11210
+swap$ -- 1346
 text.length$ -- 193
 text.prefix$ -- 0
 top$ -- 1
 type$ -- 260
 warning$ -- 0
-while$ -- 1149
+while$ -- 1148
 width$ -- 0
-write$ -- 339
+write$ -- 338

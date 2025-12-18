@@ -25,7 +25,13 @@ Handouts     = $(PDF_DIR)/$(JOBNAME)_handouts.pdf
 # Rule to generate PDF from LaTeX and PNGs
 
 presentation: $(JOBNAME).tex $(PNG) $(EEPIC) $(MISC) | $(PDF_DIR)
-	pdflatex -jobname $(PDF_DIR)/2025_Coldigiocco_presentation "\PassOptionsToClass{beamer}{beamer}\input{2025_Coldigiocco.tex}"
+	latexmk -pdf \
+		-jobname=$(PDF_DIR)/$(JOBNAME)_presentation \
+		-pdflatex='pdflatex %O "\PassOptionsToClass{beamer}{beamer}\input{%S}"' \
+		$(JOBNAME).tex
+
+.PHONY:html
+html: $(HTML)
 
 
 # Create output directories before building files
@@ -33,10 +39,10 @@ $(HTML_DIR) $(PNG_DIR) $(PDF_DIR):
 	mkdir -p $@
 
 
-
 # Rules to generate HTML from Quarto files
 $(HTML_DIR)/%.html: $(QUARTO_DIR)/%.qmd | $(HTML_DIR)
-	quarto render $< --to html --self-contained --output-dir  $(PWD)/$(HTML_DIR) 
+	cd $(QUARTO_DIR) && quarto render $(notdir $<) --to html --embed-resources
+	mv $(QUARTO_DIR)/$(notdir $@) $@
 
 # Rules to generate PNG snippets from HTML files
 $(PNG_DIR)/%.png: $(HTML_DIR)/%.html | $(PNG_DIR)
